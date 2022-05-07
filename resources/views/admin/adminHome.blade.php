@@ -58,7 +58,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>   
     </div>
     @endif
     @if(auth()->user()->hasRole(\App\Models\UserRole::ROLE_SALLE_TIRAGE_ROULEAU) || auth()->user()->hasRole(\App\Models\UserRole::ROLE_SALLE_TIRAGE_FEUILLE) || auth()->user()->hasRole(\App\Models\UserRole::ROLE_SALLE_DECOUPE)) 
