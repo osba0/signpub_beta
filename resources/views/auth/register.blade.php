@@ -109,11 +109,19 @@
                             </div>
                         </div>
 
-                        <div class="row mb-0">
+                        <div class="row mb-3">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Créer le compte') }}
                                 </button>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-md-6 offset-md-4">
+                                <a href="/login" class="btn text-warning">
+                                    <span class="material-symbols-outlined align-middle">arrow_back</span> {{ __('Retour à la page de login') }}
+                                </a>
                             </div>
                         </div>
                     </form>

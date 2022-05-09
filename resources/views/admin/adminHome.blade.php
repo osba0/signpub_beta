@@ -2,6 +2,65 @@
 
 @section('content')
 <div class="container">
+    @if(auth()->user()->hasRole(\App\Models\UserRole::ROLE_ADMIN))
+     <div class="row mb-4">
+        <div class="col-12 col-sm-6 col-xxl-4 d-flex">
+            <div class="illustration flex-fill card border border-danger border-3">
+                <div class="p-0 d-flex flex-fill card-body">
+                    <div class="g-0 w-100 row">
+                        <div class="col-6"><div class="illustration-text p-3 m-1">
+                            <h4 class="illustration-text">Bienvenu(e), <br> <?= auth()->user()->name ?></h4>
+                            <p class="mb-0 text-danger fw-bold">Administrateur</p></div>
+                        </div>
+                        <div class="align-self-center justify-content-center text-center col-6 fs-80">
+                            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xxl-4 d-flex">
+            <div class="card flex-fill">
+                <div class="card-body py-4">
+                    <div class="d-flex align-items-start">
+                        <div class="flex-grow-1">
+                            <h3 class="mb-2">{{ $countNewOrder }}</h3>
+                            <p class="mb-2">En cours de validation</p>
+                            <div class="mb-0">
+                                <a href="#" class="text-warning">Afficher</a>
+                            </div>
+                        </div>
+                        <div class="d-inline-block ms-3">
+                            <div class="stat border d-flex align-items-center justify-content-center border-3 border-warning">
+                               <span class="text-warning material-symbols-outlined">timer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xxl-4 d-flex">
+            <div class="card flex-fill">
+                <div class="card-body py-4">
+                    <div class="d-flex align-items-start">
+                        <div class="flex-grow-1">
+                            <h3 class="mb-2">{{ $countDone }}</h3>
+                            <p class="mb-2">Prête pour livraison</p>
+                            <div class="mb-0">
+                               <a href="#" class="text-warning">Afficher</a>
+                            </div>
+                        </div>
+                        <div class="d-inline-block ms-3">
+                            <div class="stat border d-flex align-items-center justify-content-center border-3 border-warning">
+                                <span class="text-warning material-symbols-outlined">local_shipping</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>   
+    </div>
+    @endif
     @if(auth()->user()->hasRole(\App\Models\UserRole::ROLE_SECRETARIAT)) 
     <div class="row mb-4">
         <div class="col-12 col-sm-6 col-xxl-4 d-flex">
