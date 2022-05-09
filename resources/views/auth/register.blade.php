@@ -16,19 +16,19 @@
 
                             <div class="col-md-6 d-flex align-items-center">
                                 <div class="bg-light px-2 rounded me-3 d-flex">
-                                    <input id="particulier" type="radio" class="form-check-input" name="type-compte"> 
+                                    <input id="particulier" type="radio"  value="1" class="form-check-input" name="type-compte"> 
                                     <label class="form-check-label fw-light ps-2" for="particulier">
                                         Particulier
                                     </label>  
                                 </div>
                                 <div class="bg-light px-2 rounded me-3 d-flex">
-                                    <input id="revendeur" type="radio" class="form-check-input" name="type-compte">
+                                    <input id="revendeur" type="radio" value="2" class="form-check-input" name="type-compte">
                                     <label class="form-check-label fw-light ps-2" for="revendeur">
                                         Revendeur
                                     </label>   
                                 </div>
                                 <div class="bg-light px-2 rounded me-3 d-flex">
-                                    <input id="entreprise" type="radio" class="form-check-input" name="type-compte">
+                                    <input id="entreprise" type="radio" value="3"  class="form-check-input" name="type-compte">
                                     <label class="form-check-label fw-light ws-nowrap ps-2" for="entreprise">
                                         Entreprise / Association
                                     </label>   
@@ -50,6 +50,22 @@
                             </div>
                         </div>
 
+                         <div class="row mb-3">
+                            <label for="compagnie" class="col-md-4 col-form-label text-md-end">{{ __('Société') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="compagnie" type="text" class="form-control @error('compagnie') is-invalid @enderror" name="company" value="">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label for="address" class="col-md-4 col-form-label text-md-end">{{ __('Adresse') }}</label>
+
+                            <div class="col-md-6">
+                                <input id="address" type="text" class="form-control" name="address" value="">
+                            </div>
+                        </div>
+
                          
 
                          <div class="row mb-3">
@@ -58,7 +74,7 @@
                             <div class="col-md-6 d-flex">  
                                 <div class="col-3">
                                     <div class="input-group-desc">
-                                    <input class="form-control" type="text" name="area_code">
+                                    <input class="form-control" type="text" value="221" name="area_code">
                                     <label class="fw-light fs-6">Indicatif</label>
                                     </div>
                                 </div>
