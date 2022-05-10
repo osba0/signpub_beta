@@ -24,7 +24,8 @@ use App\Http\Controllers\OrderController;
 });*/
 
 
-Auth::routes();
+Auth::routes(['verify' => true]);
+
 Route::get('/',  [HomeController::class, 'index'])->name('home');
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
