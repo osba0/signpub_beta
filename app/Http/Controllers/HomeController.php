@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\StatusOrder;
 use App\Models\UserRole;
 use App\Models\Order;
+use App\Models\Client;
 
 class HomeController extends Controller
 {
@@ -59,8 +60,16 @@ class HomeController extends Controller
         $actualStatus='';
 
         $canEdit = 0;
-         if($user->hasRole(UserRole::ROLE_SECRETARIAT) || $user->hasRole(UserRole::ROLE_ADMIN)){
+        $isAdmin = 0;
+
+        if($user->hasRole(UserRole::ROLE_SECRETARIAT) || $user->hasRole(UserRole::ROLE_ADMIN)){
+           $isAdmin = 1;
+        }
+
+        if($user->hasRole(UserRole::ROLE_SECRETARIAT) || $user->hasRole(UserRole::ROLE_ADMIN)){
            $canEdit = 1;
+           $actualStatus= -1;
+           $validationStatus= -1;
         }
 
         if($user->hasRole(UserRole::ROLE_SECRETARIAT)){
@@ -82,7 +91,10 @@ class HomeController extends Controller
         $countPrint      = Order::get()->where("status", StatusOrder::EN_SALLE_DE_TIRAGE)->count();
         $countFinition   = Order::get()->where("status", StatusOrder::EN_FINITION)->count();
         $countDone       = Order::get()->where("status", StatusOrder::ATTENTE_POUR_LIVRAISON)->count();
+
+        $totalOrder   = Order::get()->where("status", '>=', StatusOrder::INITIE)->count();
+        $totalClient   = Client::get()->count();
         
-        return view('admin.adminHome', compact('status', 'validationStatus', 'actualStatus', 'countNewOrder', 'countPrint', 'countFinition', 'countDone', 'canEdit'));
+        return view('admin.adminHome', compact('status', 'validationStatus', 'actualStatus', 'countNewOrder', 'countPrint', 'countFinition', 'countDone', 'canEdit', 'totalOrder', 'totalClient', 'isAdmin'));
     }
 }

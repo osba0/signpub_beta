@@ -46,27 +46,27 @@
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link px-4 py-3 fs-6 fw-bold {{ \Request::is('login') ? 'text-white border-bottom border-warning border-4' : 'text-secondary'}}" href="{{ route('login') }}"><span class="align-middle material-symbols-outlined">account_circle</span> {{ __('Se connecter') }}</a>
+                                    <a class="nav-link px-4 py-4 fs-6 fw-bold {{ \Request::is('login') ? 'text-white border-bottom border-warning border-4' : 'text-secondary'}}" href="{{ route('login') }}"><span class="align-middle material-symbols-outlined">account_circle</span> {{ __('Se connecter') }}</a>
                                 </li>
                             @endif
 
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link px-4 py-3 fs-6 fw-bold {{ \Request::is('register') ? 'text-white border-bottom border-warning border-4' : 'text-secondary'}}" href="{{ route('register') }}"><span class="align-middle material-symbols-outlined mx-1">person_add</span>{{ __('Créer un compte') }}</a>
+                                    <a class="nav-link px-4 py-4 fs-6 fw-bold {{ \Request::is('register') ? 'text-white border-bottom border-warning border-4' : 'text-secondary'}}" href="{{ route('register') }}"><span class="align-middle material-symbols-outlined mx-1">person_add</span>{{ __('Créer un compte') }}</a>
                                 </li>
                             @endif
                         @else
                             @if(auth()->user()->hasRole(\App\Models\UserRole::ROLE_ADMIN))
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.user') }}" class="nav-link px-4 py-3 fs-6 fw-bold text-secondary" >Clients</a>
+                                    <a href="{{ route('admin.user') }}" class="nav-link px-4 py-4 fs-6 fw-bold text-secondary" >Clients</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('admin.user') }}" class="nav-link px-4 py-3 fs-6 fw-bold text-secondary" >Comptes</a>
+                                    <a href="{{ route('admin.user') }}" class="nav-link px-4 py-4 fs-6 fw-bold text-secondary" >Comptes</a>
                                 </li>
                             @endif
                           
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link px-4 py-3 fs-6 fw-bold text-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown" class="nav-link px-4 py-4 fs-6 fw-bold text-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
                                 </a>
 
@@ -153,6 +153,118 @@
                 @endauth
             @yield('content')
         </main>
+
+         <footer  class="text-center text-lg-start text-white bg-dark border-top border-4 border-warning">
+            <!-- Grid container -->
+            <div class="container p-4 pb-0">
+              <!-- Section: Links -->
+              <section class="">
+                <!--Grid row-->
+                <div class="row">
+                  <!-- Grid column -->
+                  <div class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+                    <h6 class="mb-4 font-weight-bold fw-bold fs-4 text-warning">
+                      SignApp
+                    </h6>
+                    <p>
+                     La supervision de vos commandes est facile lorsque vous avez cette application à votre service. 
+                    </p>
+                  </div>
+                  <!-- Grid column -->
+
+                  <hr class="w-100 clearfix d-md-none" />
+
+                  <!-- Grid column -->
+                  <div class="col-md-3 mb-md-0 mb-4 d-flex">
+                    <div class="con con-1 w-100 py-5">
+                        <div class="con-info w-100 text-center">
+                            <div class="icon d-flex align-items-center justify-content-center">
+                                <div class="stat d-flex align-items-center justify-content-center bg-warning">
+                                    <span class="material-symbols-outlined fs-1">call</span>
+                                </div>
+                                
+                            </div>
+                            <div class="text pt-3">
+                            <span class="h6">(+221) 77 567 03 62</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                  <!-- Grid column -->
+
+                  <hr class="w-100 clearfix d-md-none" />
+
+                  <!-- Grid column -->
+                  <div class="col-md-3 mb-md-0 mb-4 d-flex border-secondary border-start border-end border-1">
+                        <div class="con con-2 w-100 py-5">
+                            <div class="con-info w-100 text-center">
+                                <div class="icon d-flex align-items-center justify-content-center">
+                                    <div class="stat d-flex align-items-center justify-content-center bg-warning">
+                                       <span class="material-symbols-outlined fs-1">mail</span>
+                                   </div>
+                                </div>
+                                <div class="text pt-3">
+                                    <span class="h6">info@signpub.sn</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                  <!-- Grid column -->
+                  <hr class="w-100 clearfix d-md-none" />
+
+                  <!-- Grid column -->
+          
+                    <div class="col-md-3 mb-md-0 mb-4 d-flex">
+                        <div class="con con-3 w-100 py-5">
+                            <div class="con-info w-100 text-center">
+                                <div class="icon d-flex align-items-center justify-content-center">
+                                    <div class="stat d-flex align-items-center justify-content-center bg-warning">
+                                        <span class="material-symbols-outlined fs-1">pin_drop</span>
+                                    </div>
+                                </div>
+                                <div class="text pt-3">
+                                    <span class="h6">Rue 5 Fass, Dakar - SENEGAL</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                  
+                  <!-- Grid column -->
+                </div>
+                <!--Grid row-->
+              </section>
+              <!-- Section: Links -->
+
+              <hr class="my-3">
+
+              <!-- Section: Copyright -->
+              <section class="p-3 pt-0">
+                <div class="row d-flex align-items-center">
+                  <!-- Grid column -->
+                  <div class="col-md-7 col-lg-8 text-center text-md-start">
+                    <!-- Copyright -->
+                    <div class="p-3">
+                      © {{ now()->year }} Copyright:
+                      <a class="text-white" href="https://mdbootstrap.com/"
+                         >SignPub</a
+                        >
+                    </div>
+                    <!-- Copyright -->
+                  </div>
+                  <!-- Grid column -->
+
+                  <!-- Grid column -->
+                  <div class="col-md-5 col-lg-4 ml-lg-0 text-center text-md-end">
+                    Made by OSBA
+                  </div>
+                  <!-- Grid column -->
+                </div>
+              </section>
+              <!-- Section: Copyright -->
+            </div>
+    <!-- Grid container -->
+  </footer>
     </div>
 </body>
 </html>

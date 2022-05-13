@@ -5550,6 +5550,60 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -5582,6 +5636,10 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
     url: {
       type: String,
       required: true
+    },
+    isAdmin: {
+      type: Number,
+      required: true
     }
   },
   data: function data() {
@@ -5595,7 +5653,6 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
         orderable: true
       }, {
         label: 'Client',
-        name: 'user',
         orderable: false
       }, {
         label: 'Matiere',
@@ -5632,7 +5689,16 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
         previousButton: '❮',
         placeholderSearch: 'Rechercher'
       },
-      tableData: {}
+      tableData: {},
+      infoClient: {
+        typeCompte: '',
+        name: '',
+        enterprise: '',
+        address: '',
+        email: '',
+        phone: '',
+        date: ''
+      }
     };
   },
   methods: {
@@ -5695,6 +5761,15 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
           });
         }
       });
+    },
+    setInfo: function setInfo(user) {
+      this.infoClient.typeCompte = '';
+      this.infoClient.name = user.name;
+      this.infoClient.enterprise = 'user.';
+      this.infoClient.address = '';
+      this.infoClient.email = user.email;
+      this.infoClient.phone = '';
+      this.infoClient.date = user.created_at;
     }
   },
   watch: {
@@ -51704,12 +51779,66 @@ var render = function () {
                                 })
                               : _vm._e(),
                             _vm._v(" "),
+                            column.label === "Client"
+                              ? _vm._t("default", function () {
+                                  return [
+                                    _vm.isAdmin
+                                      ? [
+                                          _c(
+                                            "a",
+                                            {
+                                              staticClass:
+                                                "text-primary align-middle",
+                                              attrs: {
+                                                title: "Fiche client",
+                                                "data-bs-toggle": "modal",
+                                                "data-bs-target":
+                                                  "#exampleModal",
+                                              },
+                                              on: {
+                                                click: function ($event) {
+                                                  return _vm.setInfo(
+                                                    item.infouser
+                                                  )
+                                                },
+                                              },
+                                            },
+                                            [
+                                              _c(
+                                                "span",
+                                                {
+                                                  staticClass:
+                                                    "material-symbols-outlined align-middle",
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "\n                        perm_contact_calendar\n                        "
+                                                  ),
+                                                ]
+                                              ),
+                                            ]
+                                          ),
+                                        ]
+                                      : _vm._e(),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      { staticClass: "align-middle" },
+                                      [_vm._v(_vm._s(item.user))]
+                                    ),
+                                  ]
+                                })
+                              : _vm._e(),
+                            _vm._v(" "),
                             column.label === "Action"
                               ? _vm._t("default", function () {
                                   return [
                                     _c(
                                       "div",
-                                      { staticClass: "text-end" },
+                                      {
+                                        staticClass:
+                                          "justify-content-end align-items-center d-flex",
+                                      },
                                       [
                                         item.status == _vm.currentStatus
                                           ? [
@@ -51737,15 +51866,25 @@ var render = function () {
                                                 "a",
                                                 {
                                                   staticClass:
-                                                    "btn btn-success btn-sm",
+                                                    "btn-default bg-transparent text-primary btn-sm",
                                                   attrs: {
+                                                    title: "Modifier",
                                                     href:
                                                       "/admin/orders/" +
                                                       item.id +
                                                       "/edit",
                                                   },
                                                 },
-                                                [_vm._v("Editer")]
+                                                [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "material-symbols-outlined",
+                                                    },
+                                                    [_vm._v("edit_note")]
+                                                  ),
+                                                ]
                                               ),
                                             ]
                                           : _vm._e(),
@@ -51791,11 +51930,211 @@ var render = function () {
           true
         ),
       }),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "modal fade",
+          attrs: {
+            id: "exampleModal",
+            tabindex: "-1",
+            "aria-labelledby": "exampleModalLabel",
+            "aria-hidden": "true",
+          },
+        },
+        [
+          _c("div", { staticClass: "modal-dialog modal-lg" }, [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body ps-3" }, [
+                _c(
+                  "div",
+                  { staticClass: "mb-2", attrs: { title: "Type de commpte" } },
+                  [
+                    _c(
+                      "span",
+                      {
+                        staticClass:
+                          "material-symbols-outlined fs-1 align-middle p-2 bg-light",
+                      },
+                      [_vm._v("badge")]
+                    ),
+                    _vm._v(" "),
+                    _c("label", { staticClass: "ps-3" }, [
+                      _vm._v(_vm._s(_vm.infoClient.typeCompte)),
+                    ]),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "mb-2", attrs: { title: "Nom & Prénom" } },
+                  [
+                    _c(
+                      "span",
+                      {
+                        staticClass:
+                          "material-symbols-outlined fs-1 align-middle p-2 bg-light",
+                      },
+                      [_vm._v("account_circle_full")]
+                    ),
+                    _vm._v(" "),
+                    _c("label", { staticClass: "ps-3" }, [
+                      _vm._v(_vm._s(_vm.infoClient.name)),
+                    ]),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "mb-2", attrs: { title: "Société" } },
+                  [
+                    _c(
+                      "span",
+                      {
+                        staticClass:
+                          "material-symbols-outlined fs-1 align-middle p-2 bg-light",
+                      },
+                      [_vm._v("business_center")]
+                    ),
+                    _vm._v(" "),
+                    _c("label", { staticClass: "ps-3" }, [
+                      _vm._v(_vm._s(_vm.infoClient.enterprise)),
+                    ]),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "mb-2", attrs: { title: "Adresse" } },
+                  [
+                    _c(
+                      "span",
+                      {
+                        staticClass:
+                          "material-symbols-outlined fs-1 align-middle p-2 bg-light",
+                      },
+                      [_vm._v("person_pin_circle")]
+                    ),
+                    _vm._v(" "),
+                    _c("label", { staticClass: "ps-3" }, [
+                      _vm._v(_vm._s(_vm.infoClient.address)),
+                    ]),
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "mb-2", attrs: { title: "Téléphone" } },
+                  [
+                    _c(
+                      "span",
+                      {
+                        staticClass:
+                          "material-symbols-outlined fs-1 align-middle p-2 bg-light",
+                      },
+                      [_vm._v("contact_phone")]
+                    ),
+                    _vm._v(" "),
+                    _c("label", { staticClass: "ps-3" }, [
+                      _vm._v(_vm._s(_vm.infoClient.phone)),
+                    ]),
+                  ]
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "mb-2", attrs: { title: "Email" } }, [
+                  _c(
+                    "span",
+                    {
+                      staticClass:
+                        "material-symbols-outlined fs-1 align-middle p-2 bg-light",
+                    },
+                    [_vm._v("alternate_email")]
+                  ),
+                  _vm._v(" "),
+                  _c("label", { staticClass: "ps-3" }, [
+                    _vm._v(_vm._s(_vm.infoClient.email)),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  { staticClass: "mb-2", attrs: { title: "Date inscription" } },
+                  [
+                    _c(
+                      "span",
+                      {
+                        staticClass:
+                          "material-symbols-outlined fs-1 align-middle p-2 bg-light",
+                      },
+                      [_vm._v("event_available")]
+                    ),
+                    _vm._v(" "),
+                    _c("label", { staticClass: "ps-3" }, [
+                      _vm._v(_vm._s(_vm.infoClient.date)),
+                    ]),
+                  ]
+                ),
+              ]),
+              _vm._v(" "),
+              _vm._m(1),
+            ]),
+          ]),
+        ]
+      ),
     ],
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
+        [
+          _c(
+            "span",
+            {
+              staticClass:
+                "p-2 bg-light material-symbols-outlined fs-2 me-2 align-middle",
+            },
+            [_vm._v("contacts")]
+          ),
+          _vm._v(" Fiche Client"),
+        ]
+      ),
+      _vm._v(" "),
+      _c("button", {
+        staticClass: "btn-close",
+        attrs: {
+          type: "button",
+          "data-bs-dismiss": "modal",
+          "aria-label": "Close",
+        },
+      }),
+    ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-secondary",
+          attrs: { type: "button", "data-bs-dismiss": "modal" },
+        },
+        [_vm._v("Fermer")]
+      ),
+    ])
+  },
+]
 render._withStripped = true
 
 

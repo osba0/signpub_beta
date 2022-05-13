@@ -86,7 +86,7 @@
     </div>
     <div class="row mb-3">
         <div class="col-md-9">
-            <h3 class="text-warning border-bottom border-warning border-2">Historique</h3>
+            <h3 class="text-warning border-bottom border-warning border-2">Mes commandes</h3>
         </div>
         <div class="col-md-3 text-end">
             <a href="{{ route('order.create') }}" class="btn btn-success">Nouvel commande</a>

@@ -22642,8 +22642,22 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
 body {
   font-family: "Roboto", sans-serif;
+  position: relative;
+  margin: 0;
+  min-height: 100%;
 }
 
 :root {
@@ -22752,4 +22766,23 @@ body {
 
 .fs-80 {
   font-size: 80px;
+}
+
+footer {
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: #efefef;
+  text-align: center;
+}
+
+@media (min-width: 990px) {
+  body {
+    padding-bottom: 373px;
+  }
+
+  footer {
+    position: absolute;
+  }
 }

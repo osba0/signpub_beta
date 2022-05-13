@@ -26,6 +26,7 @@ class OrderResource extends JsonResource
             'full_comment' => $this->comment,
             'status' => $this->status,
             'user' => $this->user->name,
+            'infouser' => $this->user,
             'created_at' => Carbon::parse($this->created_at)->format('d/m/Y H:m'),
         ];
     }

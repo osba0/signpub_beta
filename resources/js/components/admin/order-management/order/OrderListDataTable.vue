@@ -59,19 +59,29 @@
                         </div>
                        
                        
-                    </slot>
-
+                    </slot> 
+                    <slot v-if="column.label === 'Client'">
+                         <template v-if="isAdmin">  
+                            <a class="text-primary align-middle" title="Fiche client" @click="setInfo(item.infouser)" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="material-symbols-outlined align-middle">
+                            perm_contact_calendar
+                            </span></a>
+                           </template>
+                           <span class="align-middle">{{ item.user }}</span>
+                    </slot> 
                     <slot v-if="column.label === 'Action'">
-                    <div class="text-end">
+                    <div class="justify-content-end align-items-center d-flex">
+                         
                            <template v-if="item.status==currentStatus"> 
                                 <button class="btn btn-success btn-sm"  @click="showConfirm(item.id)">Valider</button>
                            </template>
                            <template v-if="canEdit"> 
-                                <a class="btn btn-success btn-sm"  :href="'/admin/orders/'+item.id+'/edit'">Editer</a>
+                                <a class="btn-default bg-transparent text-primary btn-sm" title="Modifier" :href="'/admin/orders/'+item.id+'/edit'"><span class="material-symbols-outlined">edit_note</span></a>
                            </template>
                             <template v-if="item.status==attenteLivraison">  
                                 <button class="btn btn-success btn-sm"  @click="showConfirmLivraison(item.id)">Livré</button>
                             </template>
+                           
+                            
                        </div>
                     </slot>
                 </td>
@@ -79,6 +89,50 @@
             </tbody>
 
         </data-table>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><span class="p-2 bg-light material-symbols-outlined fs-2 me-2 align-middle">contacts</span> Fiche Client</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body ps-3">
+                <div class="mb-2" title="Type de commpte">
+                    <span class="material-symbols-outlined fs-1 align-middle p-2 bg-light">badge</span>
+                    <label class="ps-3">{{ infoClient.typeCompte }}</label>
+                </div>
+                <div class="mb-2" title="Nom & Prénom">
+                    <span class="material-symbols-outlined fs-1 align-middle p-2 bg-light">account_circle_full</span>
+                    <label class="ps-3">{{ infoClient.name }}</label>
+                </div>
+                 <div class="mb-2" title="Société">
+                    <span class="material-symbols-outlined fs-1 align-middle p-2 bg-light">business_center</span>
+                    <label class="ps-3">{{ infoClient.enterprise }}</label>
+                </div>
+                 <div class="mb-2" title="Adresse">
+                    <span class="material-symbols-outlined fs-1 align-middle p-2 bg-light">person_pin_circle</span>
+                    <label class="ps-3">{{ infoClient.address }}</label>
+                </div>
+                 <div class="mb-2" title="Téléphone">
+                    <span class="material-symbols-outlined fs-1 align-middle p-2 bg-light">contact_phone</span>
+                    <label class="ps-3">{{ infoClient.phone }}</label>
+                </div>
+                 <div class="mb-2" title="Email">
+                    <span class="material-symbols-outlined fs-1 align-middle p-2 bg-light">alternate_email</span>
+                    <label class="ps-3">{{ infoClient.email }}</label>
+                </div>
+                 <div class="mb-2" title="Date inscription">
+                    <span class="material-symbols-outlined fs-1 align-middle p-2 bg-light">event_available</span>
+                    <label class="ps-3">{{ infoClient.date }}</label>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -94,6 +148,7 @@ export default {
         orderLivre: {type: Number, required: true},
         canEdit: {type: Number, required: true},
         url: {type: String, required: true},
+        isAdmin: {type: Number, required: true},
     },
     data() {
         return {
@@ -108,7 +163,6 @@ export default {
                 },
                 {
                     label: 'Client',
-                    name: 'user',
                     orderable: false,
                 },
                 {
@@ -154,6 +208,15 @@ export default {
                 placeholderSearch: 'Rechercher'
             },
             tableData: {}, 
+            infoClient: {
+                typeCompte: '',
+                name: '',
+                enterprise:'',
+                address: '',
+                email: '',
+                phone: '',
+                date: ''
+            }
         };
     },
     methods: {
@@ -230,6 +293,17 @@ export default {
                
               }
             });
+        },
+        setInfo(user){
+
+            this.infoClient.typeCompte = '';
+            this.infoClient.name = user.name ;
+            this.infoClient.enterprise = 'user.' ;
+            this.infoClient.address = '' ;
+            this.infoClient.email = user.email ;
+            this.infoClient.phone = '' ;
+            this.infoClient.date = user.created_at ;
+           
         }
     },
     watch: {
