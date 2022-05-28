@@ -61,22 +61,25 @@ class HomeController extends Controller
 
         $canEdit = 0;
         $isAdmin = 0;
+        $canFiltreStatus = 0;
 
         if($user->hasRole(UserRole::ROLE_SECRETARIAT) || $user->hasRole(UserRole::ROLE_ADMIN)){
            $isAdmin = 1;
+           $canFiltreStatus = 1;
         }
 
         if($user->hasRole(UserRole::ROLE_SECRETARIAT) || $user->hasRole(UserRole::ROLE_ADMIN)){
            $canEdit = 1;
            $actualStatus= -1;
            $validationStatus= -1;
+           $canFiltreStatus = 1;
         }
 
         if($user->hasRole(UserRole::ROLE_SECRETARIAT)){
             $validationStatus = StatusOrder::EN_SALLE_DE_TIRAGE;
             $actualStatus = StatusOrder::INITIE;
         }
-        if($user->hasRole(UserRole::ROLE_SALLE_TIRAGE_ROULEAU)){
+        if($user->hasRole(UserRole::ROLE_SALLE_TIRAGE_ROULEAU) || $user->hasRole(UserRole::ROLE_SALLE_TIRAGE_FEUILLE) || $user->hasRole(UserRole::ROLE_SALLE_DECOUPE)){
             $validationStatus = StatusOrder::EN_FINITION;
             $actualStatus = StatusOrder::EN_SALLE_DE_TIRAGE;
         }
@@ -95,6 +98,6 @@ class HomeController extends Controller
         $totalOrder   = Order::get()->where("status", '>=', StatusOrder::INITIE)->count();
         $totalClient   = Client::get()->count();
         
-        return view('admin.adminHome', compact('status', 'validationStatus', 'actualStatus', 'countNewOrder', 'countPrint', 'countFinition', 'countDone', 'canEdit', 'totalOrder', 'totalClient', 'isAdmin'));
+        return view('admin.adminHome', compact('status', 'validationStatus', 'actualStatus', 'countNewOrder', 'countPrint', 'countFinition', 'countDone', 'canEdit', 'totalOrder', 'totalClient', 'isAdmin', 'canFiltreStatus'));
     }
 }

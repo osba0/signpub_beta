@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use JamesDordoy\LaravelVueDatatable\Traits\LaravelVueDatatableTrait;
 use App\Models\Type;
 use App\Models\User;
@@ -12,7 +13,7 @@ class Order extends Model
 {
 
 
-    use HasFactory, LaravelVueDatatableTrait;
+    use HasFactory, LaravelVueDatatableTrait, Notifiable;
 
      protected $fillable = [
         'id',
@@ -23,7 +24,8 @@ class Order extends Model
         'comment',
         'user_id',
         'images',
-        'status'
+        'status',
+        'autre_matiere'
     ];
 
     
@@ -64,7 +66,12 @@ class Order extends Model
         'created_at' => [
             'searchable' => false,
             'orderable' => true,
+        ],
+        'autre_matiere' => [
+            'searchable' => false,
+            'orderable' => true,
         ]
+        
     ];
 
 

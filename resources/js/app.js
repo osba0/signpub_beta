@@ -15,6 +15,9 @@ import VueSweetalert2 from 'vue-sweetalert2';
  
 Vue.use(VueSweetalert2);
 
+import ToggleButton from 'vue-js-toggle-button'
+Vue.use(ToggleButton)
+
 
 /**
  * The following block of code may be used to automatically register your
@@ -31,18 +34,27 @@ Vue.use(VueSweetalert2);
 
 import UserDataTable from "./components/admin/users/UserDataTable";
 import UserCreateEdit from "./components/admin/users/UserCreateEdit";
+import ClientDataTable from "./components/admin/clients/ClientDataTable";
+import MatiereDataTable from "./components/admin/config/MatiereDataTable";
+
+import StatistiqueSurfaceTireur from "./components/admin/statistiques/StatistiqueSurfaceTireur";
 
 
 import OrderDataTable from "./components/order/OrderDataTable";
 import OrderCreateEdit from "./components/order/OrderCreateEdit";
 import OrderEdit from "./components/order/OrderEdit";
+import OrderShowClient from "./components/order/OrderShow";
+
 
 
 
 
 import OrderListDataTable from "./components/admin/order-management/order/OrderListDataTable";
 import AdminOrderEdit from "./components/admin/order-management/order/OrderEdit";
+import OrderShow from "./components/admin/order-management/order/OrderShow";
 
+
+import AccountUser from "./components/action_user/AccountUser"; 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -58,6 +70,12 @@ const app = new Vue({
         OrderCreateEdit,
         OrderListDataTable,
         OrderEdit,
-        AdminOrderEdit
+        AdminOrderEdit,
+        ClientDataTable,
+        OrderShow,
+        OrderShowClient,
+        MatiereDataTable,
+        StatistiqueSurfaceTireur,
+        AccountUser
     }
 });

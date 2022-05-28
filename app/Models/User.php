@@ -20,10 +20,14 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
         'is_admin',
-        'roles'
+        'roles',
+        'is_notify',
+        'email_verified_at',
+        'last_seen'
     ];
 
     /**
@@ -83,6 +87,15 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         return $roles;
+    }
+
+    public function isAdmin(){
+        $isAdmin = $this->getAttribute('is_admin');
+        if($isAdmin){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     

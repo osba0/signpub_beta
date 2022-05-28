@@ -18,7 +18,7 @@ class OrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type' => $this->type->name,
+            'type_id' => $this->type->name.' '.(($this->autre_matiere!=' ' && $this->autre_matiere!='')?'('.$this->autre_matiere.')':''),
             'long' => $this->long,
             'larg' => $this->larg,
             'unit' => $this->unit,
@@ -27,7 +27,8 @@ class OrderResource extends JsonResource
             'status' => $this->status,
             'user' => $this->user->name,
             'infouser' => $this->user,
-            'created_at' => Carbon::parse($this->created_at)->format('d/m/Y H:m'),
+            'autre_matiere' => $this->autre_matiere,
+            'created_at' => Carbon::parse($this->created_at)->format('d/m/Y H:i'),
         ];
     }
 }

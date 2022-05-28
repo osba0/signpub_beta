@@ -6,10 +6,17 @@ use App\Http\Resources\UserCollection;
 use App\Models\UserList;
 use App\Models\UserRole;
 use App\Models\User;
+use App\Models\Client;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\UserResource;
+
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Http\Request;
+
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -36,6 +43,24 @@ class UserController extends Controller
         return new UserCollection($users);
     }
 
+    public function getInfoClient($id){
+
+        $client = DB::table('clients')->leftJoin('account_types', 'clients.account_type_id', '=', 'account_types.id')->select('clients.*', 'account_types.name as typeCompte')->where("clients.user", $id)->first();
+
+        return response([
+            "error" => 0,
+            "company"  => $client->company,
+            "address" => $client->address,
+            "phone_code"   => $client->phone_code, 
+            "phone"   => $client->phone,
+            "typeCompte" => $client->typeCompte,
+            "phoneUnique"  => $client->phone
+        ]);
+        
+        
+        
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -56,12 +81,24 @@ class UserController extends Controller
     public function store(Request $request)
     {
 
+        $usernameExist = User::get()->where('username', request('username'))->first();
+        
+        if($usernameExist){
+            return response([
+                "code" => 1,
+                "message" => "Identifiant existe déjà!"
+            ]);
+        }
+
         try{            
             $store = User::create([
                 'name' => request('full_name'),
-                'email' => request('email'),
+                'username' => request('username'),
+                'email' => \Str::slug(request('full_name')).random_int(0, 999).'@yopmail.com', //request('email'),
                 "roles"    => array(request('roles')),
                 'is_admin' => true,
+                "is_notify"    => request('notifcationClient'),
+                "email_verified_at"    => Carbon::now(),
                 'password' => Hash::make(request('password'))
             ]);
 
@@ -85,15 +122,15 @@ class UserController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function getProfil()
     {
-        //
+        $user = Auth::user();
+        $query=User::where('id', $user->id)->get();
+        $data = new UserCollection($query);
+
+        $is_admin = $user->is_admin;
+
+        return view('actionUser.account', compact('data', 'is_admin'));
     }
 
     /**
@@ -114,9 +151,28 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function UpdateUserSimple(Request $request)
     {
-        //
+       
+       $user = User::where('id', request('user.id'));
+       
+       $userUpdate = $user->update([
+            "name" => request('user.name')
+           ]);
+
+        $client = Client::where('user', request('user.id'));
+
+        $userUpdate = $client->update([
+            "company" => request('infos.enterprise'),
+            "phone_code" => request('infos.phone_code'),
+            "phone" => request('infos.phoneUnique'),
+            "address" => request('infos.address')
+        ]);
+
+         return response([
+                "code" => 0,
+                "message" => "OK"
+            ]);
     }
 
     /**

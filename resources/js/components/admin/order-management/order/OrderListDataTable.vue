@@ -1,5 +1,6 @@
  <template>
     <div>
+        
         <data-table
             :columns="columns"
             :url="url"
@@ -12,20 +13,32 @@
         >
          <div slot="filters" slot-scope="{ tableFilters, perPage, tableData }">
                 <div class="row mb-2">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
+                         Nbre de ligne par page
                         <select class="form-control form-select" @change="selectLength($event)" v-model="filters.length">
                             <option v-for="(size, index) in perPage" :value="size">
                              {{ size }}
                             </option>
                         </select>
                     </div>
-                    <div class="col-md-9 d-flex align-items-center justify-content-end">
+                    <template v-if="canFitreStatus == 1">
+                     <div class="col-md-4 mt-3 mt-md-0 mt-xl-0 mt-xxl-0">
+                        Filtre Etat
+                        <select class="form-control form-select" v-model="filters.status">
+                            <option value="0">Tout</option>
+                            <option v-for="(etat, index) in orderStatus" :value="index">
+                             {{ etat }}
+                            </option>
+                        </select>
+                        </div>
+                    </template>
+                    <div class="col-md-9 d-flex align-items-center justify-content-end d-none">
                        
                        
 
                          <div class="d-flex align-items-center">
-                            <input name="name" v-model="filters.search" class="form-control w-200 ml-3" placeholder="Search for ID"/>
-                            <!--button class="btn-primary btn ml-2 rounded-lg shadow-sm font-weight-bold">Search</button-->
+                            <input name="name" v-model="filters.search" class="form-control w-200 ml-3 d-none" placeholder="Search for ID"/>
+                           
                         </div>
                     </div>
                 </div>
@@ -53,7 +66,7 @@
 
                              <template v-if="item.status==index">
                             
-                                <span class="text-primary"> {{ status  }}</span>
+                                <span class="rounded-pill badge " :class="'bg-'+etatColor[index-1]"> {{ status  }}</span>
                             </template>
                             
                         </div>
@@ -61,25 +74,35 @@
                        
                     </slot> 
                     <slot v-if="column.label === 'Client'">
-                         <template v-if="isAdmin">  
-                            <a class="text-primary align-middle" title="Fiche client" @click="setInfo(item.infouser)" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="material-symbols-outlined align-middle">
-                            perm_contact_calendar
-                            </span></a>
-                           </template>
-                           <span class="align-middle">{{ item.user }}</span>
+                           <template v-if="isAdmin">  
+                                <div class="d-flex">
+                                    <a class="d-flex text-primary align-middle cursor-pointer text-decoration-none" title="Fiche client" @click="setInfo(item.infouser)" data-bs-toggle="modal" data-bs-target="#exampleModal"><span class="material-symbols-outlined align-middle">perm_contact_calendar
+                                    </span><span class="align-middle">{{ item.user }}</span></a>
+                                </div>
+                            </template>
+                            <template v-else>  
+                                <span class="align-middle">{{ item.user }}</span>
+                            </template>  
                     </slot> 
                     <slot v-if="column.label === 'Action'">
                     <div class="justify-content-end align-items-center d-flex">
                          
-                           <template v-if="item.status==currentStatus"> 
-                                <button class="btn btn-success btn-sm"  @click="showConfirm(item.id)">Valider</button>
-                           </template>
-                           <template v-if="canEdit"> 
-                                <a class="btn-default bg-transparent text-primary btn-sm" title="Modifier" :href="'/admin/orders/'+item.id+'/edit'"><span class="material-symbols-outlined">edit_note</span></a>
-                           </template>
-                            <template v-if="item.status==attenteLivraison">  
-                                <button class="btn btn-success btn-sm"  @click="showConfirmLivraison(item.id)">Livré</button>
+                            <template v-if="item.status==currentStatus">
+                                 <span v-if="isloading==item.id" class="p-3 me-2 spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                <button v-if="isloading!=item.id" class="btn text-success" title="Valider" @click="showConfirm(item.id, item.infouser.id)">
+                                    <span class="material-symbols-outlined">done_outline</span>
+                                </button>
                             </template>
+                           
+                            <template v-if="canEdit && item.status == 1">
+                                <a class="btn-default bg-transparent text-primary btn-sm" title="Modifier" :href="'/admin/orders/'+item.id+'/edit'"><span class="material-symbols-outlined">border_color</span></a>
+                            </template>
+
+                            <template v-if="item.status==attenteLivraison">  
+                                <button class="btn btn-success btn-sm"  @click="showConfirmLivraison(item.id, item.infouser.id)">Livré</button>
+                            </template>
+
+                            <a class="btn-default bg-transparent text-dark btn-sm" title="Afficher" :href="'/order-get/'+item.id"><span class="material-symbols-outlined">visibility</span></a>
                            
                             
                        </div>
@@ -98,12 +121,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body ps-3">
-                <div class="mb-2" title="Type de commpte">
+                <div class="mb-2" title="Type de compte">
                     <span class="material-symbols-outlined fs-1 align-middle p-2 bg-light">badge</span>
                     <label class="ps-3">{{ infoClient.typeCompte }}</label>
                 </div>
                 <div class="mb-2" title="Nom & Prénom">
-                    <span class="material-symbols-outlined fs-1 align-middle p-2 bg-light">account_circle_full</span>
+                    <span class="material-symbols-outlined fs-1 align-middle p-2 bg-light">account_circle</span>
                     <label class="ps-3">{{ infoClient.name }}</label>
                 </div>
                  <div class="mb-2" title="Société">
@@ -149,6 +172,7 @@ export default {
         canEdit: {type: Number, required: true},
         url: {type: String, required: true},
         isAdmin: {type: Number, required: true},
+        canFitreStatus: {type: Number, required: true},
     },
     data() {
         return {
@@ -157,7 +181,7 @@ export default {
             orderDir: "desc",
             columns: [
                 {
-                    label: 'Réf CMD',
+                    label: 'Réf',
                     name: 'id',
                     orderable: true,
                 },
@@ -167,7 +191,7 @@ export default {
                 },
                 {
                     label: 'Matiere',
-                    name: 'type',
+                    name: 'type_id',
                     orderable: true,
                 },
                 {
@@ -175,7 +199,7 @@ export default {
                     orderable: false,
                 },
                 {
-                    label: 'Nbre Copie',
+                    label: 'Nbre_Copie',
                     name: 'unit',
                     orderable: false,
                 },
@@ -200,7 +224,8 @@ export default {
             ],
             filters: {
                 search: '',
-                length: 25
+                length: 25,
+                status: 0
             },
             translate: {
                 nextButton: '❯',
@@ -216,7 +241,9 @@ export default {
                 email: '',
                 phone: '',
                 date: ''
-            }
+            },
+            etatColor: ['secondary fw-normal', 'info text-dark fw-normal', 'warning fw-normal', 'danger fw-normal', 'success fw-normal'],
+            isloading: false
         };
     },
     methods: {
@@ -230,7 +257,9 @@ export default {
         paginationChangePage(page) {
             return this.$refs.orderTable.paginationChangePage(page);
         },
-        showConfirm(id){
+        showConfirm(id, user_id){
+             this.isloading = id;
+
             Swal.fire({
               title: 'Confirmez la validation',
               text: "",
@@ -242,29 +271,30 @@ export default {
               cancelButtonText: 'Non'
             }).then((result) => {
               if (result.isConfirmed) {
-
-                axios.put(`change-status/${id}/${this.valueStatus}`)
+                axios.put(`change-status/${id}/${this.valueStatus}/${user_id}`)
                 .then(res => {
-                    Swal.fire(
-                      'Succés!',
-                      'Commande validé avec succés.',
-                      'success'
-                    );
+                    Swal.fire({
+                      title: 'Succés',
+                      text: "Commande validé avec succés.",
+                      icon: 'success'
+                    }).then((result) => {
+                        this.isloading = '';
+                         location.reload();
+                    });
                 })
                 .catch(error => {
-                    EventBus.$emit(ALERT_MSG, {
-                        message: error.response.data.message || error.response.data || 'Error',
-                        messageType: 'error',
-                    });
+                   
                 });
 
                
+              }else{
+                this.isloading = '';
               }
             });
         },
-        showConfirmLivraison(id){
+        showConfirmLivraison(id, user_id){
              Swal.fire({
-              title: 'Confirmez la validation',
+              title: 'Confirmez la livraison',
               text: "",
               icon: 'warning',
               showCancelButton: true,
@@ -275,19 +305,18 @@ export default {
             }).then((result) => {
               if (result.isConfirmed) {
 
-                axios.put(`change-status/${id}/${this.orderLivre}`)
+                axios.put(`change-status/${id}/${this.orderLivre}/${user_id}`)
                 .then(res => {
-                    Swal.fire(
-                      'Succés!',
-                      'Commande validé avec succés.',
-                      'success'
-                    );
+                    Swal.fire({
+                      title: 'Succés',
+                      text: "Opération effectué avec succés.",
+                      icon: 'success'
+                    }).then((result) => {
+                         location.reload();
+                    });
                 })
                 .catch(error => {
-                    EventBus.$emit(ALERT_MSG, {
-                        message: error.response.data.message || error.response.data || 'Error',
-                        messageType: 'error',
-                    });
+                   
                 });
 
                
@@ -303,6 +332,19 @@ export default {
             this.infoClient.email = user.email ;
             this.infoClient.phone = '' ;
             this.infoClient.date = user.created_at ;
+            
+            let self = this;
+            axios.get(`client-infos/${user.id}`)
+                .then(res => {
+                    console.log(res);
+                    self.infoClient.typeCompte = res.data.typeCompte;
+                    self.infoClient.enterprise = res.data.company;
+                    self.infoClient.phone = res.data.phone_code+res.data.phone;
+                    self.infoClient.address = res.data.address;
+                })
+                .catch(error => {
+                   console.log("dd");
+                });
            
         }
     },

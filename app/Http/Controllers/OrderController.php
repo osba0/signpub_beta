@@ -4,13 +4,24 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\View\View;
 
 use App\Http\Resources\OrderCollection;
+use App\Http\Resources\OrderResource;
 use App\Http\Resources\TypeCollection;
+use App\Notifications\OrderNewNotification;
+use App\Notifications\OrderStatusNotification;
 use App\Models\Order;
 use App\Models\StatusOrder;
 use App\Models\Type;
 use App\Models\UserRole;
+use App\Models\User;
+use App\Models\LogOrder;
+
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+
 
 
 class OrderController extends Controller
@@ -34,11 +45,16 @@ class OrderController extends Controller
         $user = Auth::user();
 
         $length = $request->input('length');
+        $status = $request->input('status');
         $sortBy = $request->input('column');
         $orderBy = $request->input('dir');
         $searchValue = $request->input('search');
 
         $query = Order::eloquentQuery($sortBy, $orderBy, $searchValue);
+
+        if($status > 0){
+            $query = $query->where("status", $status);
+        }
         
         $orders = $query->where("user_id", $user->id)->paginate($length);
 
@@ -52,7 +68,7 @@ class OrderController extends Controller
      */
     public function create()
     {
-        $matiere = Type::get()->where("status", true)->toArray();
+        $matiere = Type::where("status", true)->orderBy('isOther', 'asc')->get()->toArray();
 
         return view('order.create', compact('matiere'));
     }
@@ -66,14 +82,18 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        try{            
-            $store = Order::create([
-                'type_id'    => request('matiere'),
-                'long'    => request('long'),
-                'larg'    => request('larg'),
-                'comment' => request('commentaire'),
+
+        try{ 
+            $longeur = str_replace(' ', '', request('long')); 
+            $largeur = str_replace(' ', '', request('larg'));      
+            $order = Order::create([
+                'type_id' => request('idMatiere'),
+                'long'    => floatval(str_replace(',', '.', $longeur)),
+                'larg'    => floatval(str_replace(',', '.', $largeur)),
+                'comment' => (request('commentaire')==""? ' ':request('commentaire')),
                 'unit'    => request('unit'),
                 'user_id'    => $user->id,
+                'autre_matiere' => (request('otherMatiere')==""? ' ':request('otherMatiere')),
                 'images' => '',
                 'status' => StatusOrder::INITIE
             ]);
@@ -85,7 +105,14 @@ class OrderController extends Controller
             ]);
         }
 
-        if($store){
+        if($order){
+            
+            $users_notif = User::get()->where("is_admin", true)->where("is_notify", true);
+
+            //$order->notify(new OrderNewNotification($receivers));
+
+            Notification::send($users_notif, new OrderNewNotification($order));
+
             return response([
                 "code" => 0,
                 "message" => "OK"
@@ -111,15 +138,20 @@ class OrderController extends Controller
         $sortBy = $request->input('column');
         $orderBy = $request->input('dir');
         $searchValue = $request->input('search');
-
+        $status = $request->input('status');
+        
         $query = Order::eloquentQuery($sortBy, $orderBy, $searchValue);
 
         
-        if($user->hasRole(UserRole::ROLE_SALLE_TIRAGE_ROULEAU)){
+        if($user->hasRole(UserRole::ROLE_SALLE_TIRAGE_ROULEAU) || $user->hasRole(UserRole::ROLE_SALLE_TIRAGE_FEUILLE) || $user->hasRole(UserRole::ROLE_SALLE_DECOUPE)){
            $query = $query->where("status", StatusOrder::EN_SALLE_DE_TIRAGE);
         }
         if($user->hasRole(UserRole::ROLE_FINITION)){
            $query = $query->where("status", StatusOrder::EN_FINITION);
+        }
+
+         if($status > 0){
+            $query = $query->where("status", $status);
         }
         
         $orders = $query->paginate($length);
@@ -127,16 +159,74 @@ class OrderController extends Controller
         return new OrderCollection($orders);
     }
 
-    /**
+   /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Order $order
+     * @return View
      */
-    public function show($id)
+    public function orderShow(Order $order): View
     {
-        //
+
+        $data = new OrderResource($order);
+
+        $status = StatusOrder::getStatusOrder();
+
+        $statusLog = StatusOrder::getStatusOrderLog();
+
+        $logs = LogOrder::where("order_id", $order->id)->get();
+        
+        $orderLogs = [];
+
+        foreach($logs as $log){
+            $orderLogs[] = [
+                            "status" => $log['status'],
+                            "user" => $log->user->name,
+                            "date" => Carbon::parse($log->created_at)->format('d/m/Y H:i:s') 
+                          ];
+        }
+
+        return view('admin.order.show', compact('data', 'status', 'statusLog', 'orderLogs'));
     }
+
+
+     /**
+     * Display the specified resource.
+     *
+     * @param Order $order
+     * @return View
+     */
+    public function orderView(Order $order): View
+    {
+        $user = Auth::user();
+       
+        if($order->user_id != $user->id){
+            abort(404);
+        }
+
+        $data = new OrderResource($order);
+
+        $status = StatusOrder::getStatusOrder();
+
+        $statusLog = StatusOrder::getStatusOrderLog();
+
+        $logs = LogOrder::where("order_id", $order->id)->get();
+        
+        $orderLogs = [];
+
+        foreach($logs as $log){
+            $orderLogs[] = [
+                            "status" => $log['status'],
+                            "user" => $log->user->name,
+                            "date" =>  Carbon::parse($log->created_at)->format('d/m/Y H:i:s') 
+                          ];
+        }
+
+        return view('order.show', compact('data', 'status', 'statusLog', 'orderLogs'));
+    }
+
+
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -154,7 +244,7 @@ class OrderController extends Controller
             abort(404);
         }
         $order = $result->toArray();
-        $matiere = Type::get()->where("status", true)->toArray();
+        $matiere = Type::orderBy('isOther', 'asc')->where("status", true)->get()->toArray();
 
         return view('order.edit', compact('matiere', 'order'));
     }
@@ -166,12 +256,73 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id, $status)
+    public function update(Request $request, $id, $status, $idUser)
     { 
-        Order::where('id', $id)
-              ->update([
+         foreach(auth()->user()->notifications as $notification){
+            if($notification->data['order_id']== $id){
+               $notification->markAsRead();
+            }
+        }
+
+        $order = Order::where('id', $id);
+
+        $oldStatus = $order->first()->toArray();
+
+        $order->update([
                 "status" => $status
                ]);
+
+        // Historisation du changement de status
+        LogOrder::create([
+                'order_id'   => $id,
+                'user_id'    => Auth::user()->id,
+                'status'     => $oldStatus['status']
+            ]);
+
+        // Notification du changement de status au client
+        $user = User::get()->where("id", $idUser);
+
+        Notification::send($user, new OrderStatusNotification($status, $id));
+
+        // Notification des employées en fonction du status
+        $users =User::where('is_admin', true)->get();
+
+        $id_employes = [];
+
+
+        if($status == StatusOrder::EN_SALLE_DE_TIRAGE){
+            foreach($users as $user){
+                if($user->hasRole(UserRole::ROLE_SALLE_TIRAGE_ROULEAU) || $user->hasRole(UserRole::ROLE_SALLE_TIRAGE_FEUILLE) || $user->hasRole(UserRole::ROLE_SALLE_DECOUPE)){
+                      $id_employes[] = $user->id;
+                }
+            }
+        }
+
+        if($status == StatusOrder::EN_FINITION){
+            foreach($users as $user){
+                if($user->hasRole(UserRole::ROLE_FINITION)){
+                      $id_employes[] = $user->id;
+                }
+            }
+        }
+
+        if($status == StatusOrder::ATTENTE_POUR_LIVRAISON){
+            foreach($users as $user){
+                if($user->hasRole(UserRole::ROLE_ADMIN) || $user->hasRole(UserRole::ROLE_SECRETARIAT)){
+                      $id_employes[] = $user->id;
+                }
+            }
+        }
+
+        
+
+
+        $employes =User::whereIn('id', $id_employes)->get();
+
+        Notification::send($employes, new OrderStatusNotification($status, $id));
+
+
+       
 
         return response([
             "code" => 0,
@@ -186,15 +337,19 @@ class OrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function updateOrder(Request $request)
+    public function updateOrder(Request $request) 
     { 
+        $longeur = str_replace(' ', '', request('long')); 
+        $largeur = str_replace(' ', '', request('larg'));   
+
         Order::where('id', request('id'))->where('user_id', request('user_id'))
               ->update([
                 'type_id'    => request('type_id'),
-                'long'    => request('long'),
-                'larg'    => request('larg'),
-                'comment' => request('comment'),
-                'unit'    => request('unit')
+                'long'    => floatval(str_replace(',', '.', $longeur)),
+                'larg'    => floatval(str_replace(',', '.', $largeur)),
+                'comment' => (request('commentaire')==""? ' ':request('commentaire')),
+                'unit'    => request('unit'),
+                'autre_matiere' => (request('autre_matiere')==""? ' ':request('autre_matiere'))
                ]);
 
         return response([
@@ -219,20 +374,39 @@ class OrderController extends Controller
             abort(404);
         }
         $order = $result->toArray();
-        $matiere = Type::get()->where("status", true)->toArray();
+        $matiere = Type::where("status", true)->orderBy('isOther', 'asc')->get()->toArray();
 
         return view('admin.order.edit', compact('matiere', 'order'));
     }
 
     
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    public function deleteOrder(Request $request){
+     
+        $resp = Order::where('id', request('id'))->delete();
+
+        if($resp){
+            // delete notification
+            DB::table('notifications')->where('data->order_id', request('id'))->delete();
+            return response([
+                "code" => 0,
+                "message" => "OK"
+            ]);
+
+       }else{
+
+            return response([
+                "code" => 1,
+                "message" => "Erreur!"
+            ]);
+       }
+
+       /*
+$user->notifications()
+    ->where('id', $notificationId) // and/or ->where('type', $notificationType)
+    ->get()
+    ->first()
+    ->delete();
+       */
+    
     }
 }

@@ -19,7 +19,7 @@
                             </option>
                         </select>
                     </div>
-                    <div class="col-md-9 d-flex align-items-center justify-content-end">
+                    <div class="col-md-9 d-flex align-items-center justify-content-end d-none">
                        
                        
 
@@ -32,7 +32,7 @@
             </div>
            
             <tbody slot="body" slot-scope="{ data }">
-            <tr :key="item.id" v-for="item in data" @click="showOrder(item)" class="tr-data">
+            <tr :key="item.id" v-for="item in data" class="tr-data">
                 <td
                     :key="column.name"
                     v-for="column in columns"
@@ -79,6 +79,12 @@ export default {
                     orderable: true,
                 },
                 {
+                    label: 'Identifiant',
+                    name: 'username',
+                    orderable: true,
+                },
+                
+                {
                     label: 'Role',
                     name: 'role',
                     orderable: false,
@@ -86,6 +92,18 @@ export default {
                 {
                     label: 'Email',
                     name: 'email',
+                    orderable: false,
+                },
+                {
+                    
+                    label: 'Status',
+                    name: 'is_online',
+                    orderable: false,
+                },
+                {
+                    
+                    label: 'Derniére connexion',
+                    name: 'last_seen',
                     orderable: false,
                 },
                 {

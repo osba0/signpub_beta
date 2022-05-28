@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Carbon\Carbon;
 use App\Models\UserRole;
+use Cache;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,8 +23,11 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'role'  => UserRole::getRoleList()[$this->roles[0]],
-            'created_at' => Carbon::parse($this->created_at)->format('d/m/Y H:m'),
+            'username' => $this->username,
+            'role'  => ($this->roles!=''? UserRole::getRoleList()[$this->roles[0]]:'User'),
+            'created_at' => Carbon::parse($this->created_at)->format('d/m/Y H:i'),
+            'is_online' => Cache::has('user-is-online-' . $this->id)? ' <span class="text-success text-nowrap fw-bold">En Ligne</span>' : ' <span class="text-danger text-nowrap fw-bold">Hors Ligne</span>',
+            'last_seen' => ($this->last_seen!=""?Carbon::parse($this->last_seen)->diffForHumans():'') 
             
         ];
     }

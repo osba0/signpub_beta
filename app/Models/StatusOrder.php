@@ -18,7 +18,7 @@ class StatusOrder extends Model
     /***
      * @return array
      */
-    public static function getStatusOrder()
+    public function getStatusOrder()
     {
         return [
             static::INITIE  => 'En cours de validation',
@@ -41,5 +41,33 @@ class StatusOrder extends Model
             static::ATTENTE_POUR_LIVRAISON => 'En attente de Livraison',
             static::LIVRE => 'Livré'
         ];
+    }
+
+    /***
+     * @return array
+     */
+    public static function getStatusOrderLog()
+    {
+        return [
+            static::INITIE  => 'Validation',
+            static::EN_SALLE_DE_TIRAGE => 'Salle de tirage',
+            static::EN_FINITION => 'Finition',
+            static::ATTENTE_POUR_LIVRAISON => 'Attente de Livraison',
+            static::LIVRE => 'Livré'
+        ];
+    }
+
+       /***
+     * @param $status
+     * @return string
+     */
+    public function getValueStatusOrder($status)
+    {
+        $allStatus = static::getStatusOrder();
+        foreach($allStatus as $key => $value) {
+            if ($key == $status) {
+                return $value;
+            }
+        }
     }
 }

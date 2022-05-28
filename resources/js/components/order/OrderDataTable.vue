@@ -13,21 +13,29 @@
         >
          <div slot="filters" slot-scope="{ tableFilters, perPage, tableData }">
                 <div class="row mb-2">
-                    <div class="col-md-3">
+                    <div class="col-md-4 mb-xl-3">
+                        Nbre de ligne par page
                         <select class="form-control form-select" @change="selectLength($event)" v-model="filters.length">
                             <option v-for="(size, index) in perPage" :value="size">
                              {{ size }}
                             </option>
                         </select>
                     </div>
-                    <div class="col-md-9 d-flex align-items-center justify-content-end">
-                       
-                       
-
-                         <div class="d-flex align-items-center">
-                            <input name="name" v-model="filters.search" class="form-control w-200 ml-3" placeholder="Search for ID"/>
-                            <!--button class="btn-primary btn ml-2 rounded-lg shadow-sm font-weight-bold">Search</button-->
-                        </div>
+                    <div class="col-md-4 mt-3 mt-md-0 mt-xl-0 mt-xxl-0">
+                        Filtre Etat
+                        <select class="form-control form-select" v-model="filters.status">
+                            <option value="0">Tout</option>
+                            <option v-for="(etat, index) in orderStatus" :value="index">
+                             {{ etat }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 d-flex align-items-center justify-content-end">
+                         <!--div class="d-flex align-items-start flex-column">
+                            Recherche
+                            <input v-model="filters.search" class="form-control w-200 ml-3" placeholder="N°commande, matiére..."/>
+                          
+                        </div-->
                     </div>
                 </div>
             </div>
@@ -46,15 +54,15 @@
                     >
                     </data-table-cell>
                     <slot v-if="column.label === 'Dimension'">
-                       <span class="font-weight-semi-bold">{{ item.long * item.larg }}m<sup>2</sup> ({{ item.long }}x{{ item.larg }})</span>
+                       <span class="font-weight-semi-bold">{{ (item.long * item.larg).toFixed(2) }}m<sup>2</sup> ({{ item.long }}x{{ item.larg }})</span>
                     </slot>
-                     <slot v-if="column.label === 'Status'">
+                     <slot v-if="column.label === 'Etat'">
 
                         <div v-for="(status, index) in orderStatus" v-bind:value="index">
 
                              <template v-if="item.status==index">
                             
-                                <span class="badge bg-primary"> {{ status  }}</span>
+                                <span class="rounded-pill badge " :class="'bg-'+etatColor[index-1]"> {{ status  }}</span>
                             </template>
                             
                         </div>
@@ -63,14 +71,16 @@
                     </slot>
 
                     <slot v-if="column.label === 'Action'">
-                        <div class="text-end">
-                            <template v-if="orderInite==item.status">
-                                <a class="btn btn-success btn-sm"  :href="'/orders/'+item.id+'/edit'">Editer</a> 
-                            </template>
+                        <div class="justify-content-end align-items-center d-flex">
                             
-                            <button class="btn btn-error">
-                                <i class="fa fa-trash" aria-hidden="true"></i>
-                            </button>
+                            <template v-if="orderInite==item.status">
+                                <a class="btn-default bg-transparent text-primary btn-sm"  :href="'/orders/'+item.id+'/edit'"><span class="material-symbols-outlined">border_color</span></a> 
+                                <button class="btn bg-transparent text-primary btn-sm" @click="deleteOrder(item)">
+                                    <span class="material-symbols-outlined text-danger">delete</span>
+                                </button>
+                            </template>
+                             <a class="btn-default bg-transparent text-dark btn-sm" title="Modifier" :href="'/orders/'+item.id"><span class="material-symbols-outlined">visibility</span></a>
+                            
                        </div>
                     </slot>
                 </td>
@@ -81,7 +91,7 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-
+const Swal = require('sweetalert2');
 export default { 
     name: "OrderDataTable",    
     
@@ -97,13 +107,13 @@ export default {
             orderDir: "desc",
             columns: [
                 {
-                    label: 'Réf CMD',
+                    label: 'Réf',
                     name: 'id',
                     orderable: true,
                 },
                 {
-                    label: 'Matiere',
-                    name: 'type',
+                    label: 'Matiére',
+                    name: 'type_id',
                     orderable: true,
                 },
                 {
@@ -111,12 +121,12 @@ export default {
                     orderable: false,
                 },
                 {
-                    label: 'Nbre Copie',
+                    label: 'Nbre_Copie',
                     name: 'unit',
                     orderable: false,
                 },
                 {
-                    label: 'Status',
+                    label: 'Etat',
                     orderable: false,
                 },
                 {
@@ -134,14 +144,15 @@ export default {
                     orderable: false,
                     class: { 
                         'btn': true,
-                    'btn-primary': true,
-                    'btn-sm': true,
+                        'btn-primary': true,
+                        'btn-sm': true,
                     } 
                 }
             ],
             filters: {
                 search: '',
-                length: 25
+                length: 25,
+                status: 0
             },
             translate: {
                 nextButton: '❯',
@@ -154,6 +165,7 @@ export default {
                 }
             },
             tableData: {}, 
+            etatColor: ['secondary fw-normal', 'info text-dark fw-normal', 'warning fw-normal', 'danger fw-normal', 'success fw-normal']
         };
     },
     methods: {
@@ -167,6 +179,45 @@ export default {
         paginationChangePage(page) {
             return this.$refs.orderTable.paginationChangePage(page);
         },
+        deleteOrder(order){
+            Swal.fire({
+              title: "Etes-vous sûr de vouloir supprimé la <u>commande #"+order.id+"</u>?",
+              text: "La suppression est définitive!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Oui, supprimé!'
+            }).then((result) => {
+              if (result.isConfirmed) {
+
+
+                axios.delete('order/delete/'+order.id)
+                .then(response => {
+                    if(response.data.code==0){
+                         Swal.fire({
+                            title: 'Supprimé!',
+                            text:   'La commande #'+order.id+' a été supprimé.',
+                            icon:  'success'
+                            }).then((result) => {
+                        location.reload();
+                    });
+
+                    }else{
+                        Swal.fire(
+                          'Error!',
+                        '',
+                          'error'
+                        ); 
+                    }
+                })
+                .catch(error => {
+                    
+                });
+               
+              }
+            });
+        }
     },
     watch: {
         activeStatus: function () {

@@ -14,6 +14,7 @@
                     type="text"
                     name="matiere"
                     class="form-select px-2 w-100 border-0 shadow-none"
+                    @change="otherMatieres($event)"
                 >
                     <option value=''>Choisir</option>
                     <option :value='matiere.id' v-for="matiere in listMatiere">
@@ -21,6 +22,19 @@
                     </option>
                 </select>
             </div>
+             <template v-if="(order.autre_matiere!=' ' && showOhter) || showOhter">
+                <div class="mt-2 bg-white align-items-center py-1 border rounded-lg border-2 div-focus flex-1">
+                <input
+                    id="other"
+                    type="text"
+                    v-model="order.autre_matiere"
+                    name="otherMatiere"
+                    placeholder="Précisez la matiére"
+                    class="form-control border-0 shadow-none bg-transparent"
+                   
+                >
+                </div>
+            </template>
         </div>
 
         <div class="mb-3">
@@ -95,15 +109,15 @@
 
         <button
             type="submit"
-            class="btn btn-success"
+            class="btn btn-success btn-lg"
         >
-            Enregistrer
+             <span v-if="isloading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Enregistrer
         </button>
     </form>
 </template>
 
 <script>
-
+const Swal = require('sweetalert2');
 export default {
     name: "OrderEdit",
     props: {
@@ -115,41 +129,43 @@ export default {
     data() {
         return {
             errors: [],
-            order: this.dataOrder
+            order: this.dataOrder,
+            showOhter: false,
+            isloading: false 
         }
     },
     methods: {
+        otherMatieres(event){
+            var text = event.target.options[event.target.options.selectedIndex].text;
+            if(text=='Autre'){ 
+                this.showOhter = true;
+            }else{
+                this.showOhter = false;
+            }
+        },
         updateOrder() {
+            this.isloading=true;  
             axios.put(this.route, this.order)
                 .then(response => {
-                   
-                    console.log(response);
-
-                    window.location.href = this.urlBack;
+                   var self=this;
+                    setTimeout(function(){
+                       self.isloading=false;   
+                    },500);
+                     Swal.fire({
+                      title: 'Succés',
+                      text: "Commande modifiée avec succés!",
+                      icon: 'success'
+                    }).then((result) => {
+                       location.reload();
+                    });
                 })
                 .catch(error => {
-                    let message = '';
-                    if (typeof error.response.data.errors === "object") {
-                        for (const [key, value] of Object.entries(error.response.data.errors)) {
-                            message = message + "\r\n" + value;
-                        }
-                        EventBus.$emit(ALERT_MSG, {
-                            message: message,
-                            messageType: 'error',
-                            messageTime: 8000
-                        });
-                    } else {
-                        EventBus.$emit(ALERT_MSG, {
-                            message: error.response.data,
-                            messageType: 'error',
-                            messageTime: 8000
-                        });
-                    }
-                    console.log(error.response)
+                    
                 });
         },
     },
     created() {
+        this.showOhter = (this.dataOrder.autre_matiere !=' '? true: false);
         if (typeof this.userData !== "undefined") {
             this.user = this.userData;
             this.user.roles = this.userData.roles

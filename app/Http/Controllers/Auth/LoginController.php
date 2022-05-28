@@ -47,13 +47,15 @@ class LoginController extends Controller
 
         $this->validate($request, [
 
-            'email' => 'required|email',
+            //'email' => 'required|email',
+            'username' => 'required',
 
             'password' => 'required',
 
         ]);
 
-        if(auth()->attempt(array('email' => $input['email'], 'password' => $input['password'])))
+         $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        if(auth()->attempt(array($fieldType => $input['username'], 'password' => $input['password'])))
         {
             if (auth()->user()->is_admin == true) {
 

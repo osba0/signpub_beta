@@ -22777,12 +22777,100 @@ footer {
   text-align: center;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.bg-light-green {
+  background: rgba(89, 165, 145, 0.16) !important;
+}
+
+.progress_status {
+  height: 5px;
+  width: 100%;
+  left: 0;
+  bottom: -3px !important;
+}
+
+.page-item.active .page-link {
+  background-color: var(--bs-dark);
+  border-color: var(--bs-dark);
+}
+
+.page-link:hover, .page-link {
+  color: var(--bs-dark);
+}
+
+.filtreTireur > div {
+  width: 33%;
+}
+
+.filtreTireur > div input {
+  width: 100%;
+}
+
+#notifUl {
+  max-height: 120px;
+  overflow-y: auto;
+}
+
 @media (min-width: 990px) {
   body {
-    padding-bottom: 373px;
+    padding-bottom: 96px;
   }
 
   footer {
     position: absolute;
+  }
+}
+@media (max-width: 990px) {
+  .dasboard-client > DIV {
+    margin-bottom: 15px;
+  }
+
+  .dasboard-client {
+    padding-bottom: 15px;
+    margin-bottom: 0 !important;
+  }
+
+  #navbarSupportedContent > ul > li {
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-bottom: 1px solid #dedede !important;
+  }
+
+  #navbarSupportedContent {
+    padding-bottom: 15px;
+  }
+}
+@media (max-width: 767px) {
+  .notifMobile {
+    right: 90px;
+    top: 15px;
+  }
+
+  .dasboard-client > DIV p {
+    font-size: 16px !important;
+  }
+
+  .dasboard-client .card-body {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .hidden-xs {
+    display: none !important;
+  }
+
+  .ul-step {
+    flex-direction: column;
+  }
+
+  .ul-step li {
+    text-align: left !important;
+  }
+
+  .bottom-30-xs {
+    margin-bottom: 30px;
   }
 }

@@ -43,6 +43,16 @@ class UserList extends Model
         'created_at' => [
             'searchable' => false,
             'orderable' => true,
+        ],
+        'last_seen' => [
+            'searchable' => false,
+            'orderable' => true,
+        ],
+        'username' => [
+            'searchable' => false,
+            'orderable' => true,
         ]
+        
+        
     ];
 }
