@@ -43,7 +43,6 @@
             <tbody slot="body" slot-scope="{ data }">
           
             <tr :key="item.id" v-for="item in data" class="tr-data">
-                <td v-if="data.length==0" colspan="8" align="center">Aucune commande disponible <a href="/orders/create">Créer une nouvelle commande</a></td>
                 <td
                     :key="column.name"
                     v-for="column in columns"
@@ -88,7 +87,9 @@
                 </td>
             </tr>
             </tbody>
-
+             <template v-slot:no-data>
+              <p>The Table is Empty. Please insert data with the above Button.</p>
+          </template>
         </data-table>
         
     </div>
