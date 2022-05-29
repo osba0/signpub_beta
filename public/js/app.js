@@ -5820,7 +5820,7 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
         if (response.data.code == 0) {
           Swal.fire({
             title: 'Succés',
-            text: "Matiére validé avec succés.",
+            text: "Matiére ajouté avec succés.",
             icon: 'success'
           }).then(function (result) {
             window.location.href = _this.urlBack;
@@ -7183,11 +7183,13 @@ __webpack_require__.r(__webpack_exports__);
         label: 'Role',
         name: 'role',
         orderable: false
-      }, {
-        label: 'Email',
-        name: 'email',
-        orderable: false
-      }, {
+      },
+      /*   {
+             label: 'Email',
+             name: 'email',
+             orderable: false,
+         },*/
+      {
         label: 'Status',
         name: 'is_online',
         orderable: false
@@ -7563,6 +7565,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -7682,13 +7687,7 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
   watch: {
     activeStatus: function activeStatus() {
       var self = this;
-      axios.get("orders/order-list?search=".concat(self.search, "&dir=desc&column=imported_at&length=10&draw=0&page=1")).then(function (res) {//
-      })["catch"](function (error) {
-        EventBus.$emit(ALERT_MSG, {
-          message: error.response.data.message || error.response.data || 'Error',
-          messageType: 'error'
-        });
-      });
+      axios.get("orders/order-list?search=".concat(self.search, "&dir=desc&column=imported_at&length=10&draw=0&page=1")).then(function (res) {})["catch"](function (error) {});
     }
   }
 });
@@ -78728,8 +78727,8 @@ var render = function () {
       _vm._v(" "),
       _c(
         "button",
-        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
-        [_vm._v("\n        Submit\n    ")]
+        { staticClass: "btn btn-success btn-lg", attrs: { type: "submit" } },
+        [_vm._v("\n        Valider\n    ")]
       ),
     ]
   )
@@ -79501,176 +79500,204 @@ var render = function () {
                     return _c(
                       "tr",
                       { key: item.id, staticClass: "tr-data" },
-                      _vm._l(_vm.columns, function (column) {
-                        return _c(
-                          "td",
-                          {
-                            key: column.name,
-                            staticClass:
-                              "laravel-vue-datatable-td align-middle",
-                          },
-                          [
-                            _c("data-table-cell", {
-                              attrs: {
-                                value: item,
-                                name: column.name,
-                                meta: column.meta,
-                              },
-                            }),
-                            _vm._v(" "),
-                            column.label === "Dimension"
-                              ? _vm._t("default", function () {
-                                  return [
-                                    _c(
-                                      "span",
-                                      { staticClass: "font-weight-semi-bold" },
-                                      [
-                                        _vm._v(
-                                          _vm._s(
-                                            (item.long * item.larg).toFixed(2)
-                                          ) + "m"
-                                        ),
-                                        _c("sup", [_vm._v("2")]),
-                                        _vm._v(
-                                          " (" +
-                                            _vm._s(item.long) +
-                                            "x" +
-                                            _vm._s(item.larg) +
-                                            ")"
-                                        ),
-                                      ]
-                                    ),
-                                  ]
-                                })
-                              : _vm._e(),
-                            _vm._v(" "),
-                            column.label === "Etat"
-                              ? _vm._t("default", function () {
-                                  return _vm._l(
-                                    _vm.orderStatus,
-                                    function (status, index) {
-                                      return _c(
-                                        "div",
-                                        { attrs: { value: index } },
+                      [
+                        data.length == 0
+                          ? _c(
+                              "td",
+                              { attrs: { colspan: "8", align: "center" } },
+                              [
+                                _vm._v("Aucune commande disponible "),
+                                _c("a", { attrs: { href: "/orders/create" } }, [
+                                  _vm._v("Créer une nouvelle commande"),
+                                ]),
+                              ]
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _vm._l(_vm.columns, function (column) {
+                          return _c(
+                            "td",
+                            {
+                              key: column.name,
+                              staticClass:
+                                "laravel-vue-datatable-td align-middle",
+                            },
+                            [
+                              _c("data-table-cell", {
+                                attrs: {
+                                  value: item,
+                                  name: column.name,
+                                  meta: column.meta,
+                                },
+                              }),
+                              _vm._v(" "),
+                              column.label === "Dimension"
+                                ? _vm._t("default", function () {
+                                    return [
+                                      _c(
+                                        "span",
+                                        {
+                                          staticClass: "font-weight-semi-bold",
+                                        },
                                         [
-                                          item.status == index
+                                          _vm._v(
+                                            _vm._s(data.length) +
+                                              " " +
+                                              _vm._s(
+                                                (item.long * item.larg).toFixed(
+                                                  2
+                                                )
+                                              ) +
+                                              "m"
+                                          ),
+                                          _c("sup", [_vm._v("2")]),
+                                          _vm._v(
+                                            " (" +
+                                              _vm._s(item.long) +
+                                              "x" +
+                                              _vm._s(item.larg) +
+                                              ")"
+                                          ),
+                                        ]
+                                      ),
+                                    ]
+                                  })
+                                : _vm._e(),
+                              _vm._v(" "),
+                              column.label === "Etat"
+                                ? _vm._t("default", function () {
+                                    return _vm._l(
+                                      _vm.orderStatus,
+                                      function (status, index) {
+                                        return _c(
+                                          "div",
+                                          { attrs: { value: index } },
+                                          [
+                                            item.status == index
+                                              ? [
+                                                  _c(
+                                                    "span",
+                                                    {
+                                                      staticClass:
+                                                        "rounded-pill badge ",
+                                                      class:
+                                                        "bg-" +
+                                                        _vm.etatColor[
+                                                          index - 1
+                                                        ],
+                                                    },
+                                                    [
+                                                      _vm._v(
+                                                        " " + _vm._s(status)
+                                                      ),
+                                                    ]
+                                                  ),
+                                                ]
+                                              : _vm._e(),
+                                          ],
+                                          2
+                                        )
+                                      }
+                                    )
+                                  })
+                                : _vm._e(),
+                              _vm._v(" "),
+                              column.label === "Action"
+                                ? _vm._t("default", function () {
+                                    return [
+                                      _c(
+                                        "div",
+                                        {
+                                          staticClass:
+                                            "justify-content-end align-items-center d-flex",
+                                        },
+                                        [
+                                          _vm.orderInite == item.status
                                             ? [
                                                 _c(
-                                                  "span",
+                                                  "a",
                                                   {
                                                     staticClass:
-                                                      "rounded-pill badge ",
-                                                    class:
-                                                      "bg-" +
-                                                      _vm.etatColor[index - 1],
+                                                      "btn-default bg-transparent text-primary btn-sm",
+                                                    attrs: {
+                                                      href:
+                                                        "/orders/" +
+                                                        item.id +
+                                                        "/edit",
+                                                    },
                                                   },
-                                                  [_vm._v(" " + _vm._s(status))]
+                                                  [
+                                                    _c(
+                                                      "span",
+                                                      {
+                                                        staticClass:
+                                                          "material-symbols-outlined",
+                                                      },
+                                                      [_vm._v("border_color")]
+                                                    ),
+                                                  ]
+                                                ),
+                                                _vm._v(" "),
+                                                _c(
+                                                  "button",
+                                                  {
+                                                    staticClass:
+                                                      "btn bg-transparent text-primary btn-sm",
+                                                    on: {
+                                                      click: function ($event) {
+                                                        return _vm.deleteOrder(
+                                                          item
+                                                        )
+                                                      },
+                                                    },
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "span",
+                                                      {
+                                                        staticClass:
+                                                          "material-symbols-outlined text-danger",
+                                                      },
+                                                      [_vm._v("delete")]
+                                                    ),
+                                                  ]
                                                 ),
                                               ]
                                             : _vm._e(),
-                                        ],
-                                        2
-                                      )
-                                    }
-                                  )
-                                })
-                              : _vm._e(),
-                            _vm._v(" "),
-                            column.label === "Action"
-                              ? _vm._t("default", function () {
-                                  return [
-                                    _c(
-                                      "div",
-                                      {
-                                        staticClass:
-                                          "justify-content-end align-items-center d-flex",
-                                      },
-                                      [
-                                        _vm.orderInite == item.status
-                                          ? [
+                                          _vm._v(" "),
+                                          _c(
+                                            "a",
+                                            {
+                                              staticClass:
+                                                "btn-default bg-transparent text-dark btn-sm",
+                                              attrs: {
+                                                title: "Modifier",
+                                                href: "/orders/" + item.id,
+                                              },
+                                            },
+                                            [
                                               _c(
-                                                "a",
+                                                "span",
                                                 {
                                                   staticClass:
-                                                    "btn-default bg-transparent text-primary btn-sm",
-                                                  attrs: {
-                                                    href:
-                                                      "/orders/" +
-                                                      item.id +
-                                                      "/edit",
-                                                  },
+                                                    "material-symbols-outlined",
                                                 },
-                                                [
-                                                  _c(
-                                                    "span",
-                                                    {
-                                                      staticClass:
-                                                        "material-symbols-outlined",
-                                                    },
-                                                    [_vm._v("border_color")]
-                                                  ),
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "button",
-                                                {
-                                                  staticClass:
-                                                    "btn bg-transparent text-primary btn-sm",
-                                                  on: {
-                                                    click: function ($event) {
-                                                      return _vm.deleteOrder(
-                                                        item
-                                                      )
-                                                    },
-                                                  },
-                                                },
-                                                [
-                                                  _c(
-                                                    "span",
-                                                    {
-                                                      staticClass:
-                                                        "material-symbols-outlined text-danger",
-                                                    },
-                                                    [_vm._v("delete")]
-                                                  ),
-                                                ]
+                                                [_vm._v("visibility")]
                                               ),
                                             ]
-                                          : _vm._e(),
-                                        _vm._v(" "),
-                                        _c(
-                                          "a",
-                                          {
-                                            staticClass:
-                                              "btn-default bg-transparent text-dark btn-sm",
-                                            attrs: {
-                                              title: "Modifier",
-                                              href: "/orders/" + item.id,
-                                            },
-                                          },
-                                          [
-                                            _c(
-                                              "span",
-                                              {
-                                                staticClass:
-                                                  "material-symbols-outlined",
-                                              },
-                                              [_vm._v("visibility")]
-                                            ),
-                                          ]
-                                        ),
-                                      ],
-                                      2
-                                    ),
-                                  ]
-                                })
-                              : _vm._e(),
-                          ],
-                          2
-                        )
-                      }),
-                      0
+                                          ),
+                                        ],
+                                        2
+                                      ),
+                                    ]
+                                  })
+                                : _vm._e(),
+                            ],
+                            2
+                          )
+                        }),
+                      ],
+                      2
                     )
                   }),
                   0

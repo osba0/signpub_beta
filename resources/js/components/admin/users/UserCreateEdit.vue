@@ -136,9 +136,9 @@
 
         <button
             type="submit"
-            class="btn btn-primary"
+            class="btn btn-success btn-lg"
         >
-            Submit
+            Valider
         </button>
     </form>
 </template>

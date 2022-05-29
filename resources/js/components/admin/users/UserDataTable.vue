@@ -89,11 +89,11 @@ export default {
                     name: 'role',
                     orderable: false,
                 },
-                {
+             /*   {
                     label: 'Email',
                     name: 'email',
                     orderable: false,
-                },
+                },*/
                 {
                     
                     label: 'Status',

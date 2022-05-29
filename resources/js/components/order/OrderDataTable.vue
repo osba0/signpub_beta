@@ -41,7 +41,9 @@
             </div>
            
             <tbody slot="body" slot-scope="{ data }">
+          
             <tr :key="item.id" v-for="item in data" class="tr-data">
+                <td v-if="data.length==0" colspan="8" align="center">Aucune commande disponible <a href="/orders/create">Créer une nouvelle commande</a></td>
                 <td
                     :key="column.name"
                     v-for="column in columns"
@@ -54,7 +56,7 @@
                     >
                     </data-table-cell>
                     <slot v-if="column.label === 'Dimension'">
-                       <span class="font-weight-semi-bold">{{ (item.long * item.larg).toFixed(2) }}m<sup>2</sup> ({{ item.long }}x{{ item.larg }})</span>
+                       <span class="font-weight-semi-bold">{{data.length}} {{ (item.long * item.larg).toFixed(2) }}m<sup>2</sup> ({{ item.long }}x{{ item.larg }})</span>
                     </slot>
                      <slot v-if="column.label === 'Etat'">
 
@@ -88,6 +90,7 @@
             </tbody>
 
         </data-table>
+        
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -224,13 +227,10 @@ export default {
             let self = this;
             axios.get(`orders/order-list?search=${self.search}&dir=desc&column=imported_at&length=10&draw=0&page=1`)
                 .then(res => {
-                    //
+                    
                 })
                 .catch(error => {
-                    EventBus.$emit(ALERT_MSG, {
-                        message: error.response.data.message || error.response.data || 'Error',
-                        messageType: 'error',
-                    });
+                  
                 });
         }
     }

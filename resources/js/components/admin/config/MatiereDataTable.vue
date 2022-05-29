@@ -189,7 +189,7 @@ export default {
                 if(response.data.code==0){
                     Swal.fire({
                       title: 'Succés',
-                      text: "Matiére validé avec succés.",
+                      text: "Matiére ajouté avec succés.",
                       icon: 'success'
                     }).then((result) => {
                         window.location.href = this.urlBack;
