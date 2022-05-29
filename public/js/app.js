@@ -7568,10 +7568,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({

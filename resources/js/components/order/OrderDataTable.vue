@@ -39,7 +39,6 @@
                     </div>
                 </div>
             </div>
-           <tbody slot="body" slot-scope="{ no-data }"><tr><td>No data</td></tr></tbody>
             <tbody slot="body" slot-scope="{ data }">
             <tr v-if="tableData.length > 0">
                  <td colspan="8" align="center">Aucune commande disponible <a href="/orders/create">Créer une nouvelle commande</a></td>
@@ -92,9 +91,6 @@
 
         </data-table>
         
-         <!--iv v-if="tableData.length > 0">
-                 <div align="center">Aucune commande disponible <a href="/orders/create">Créer une nouvelle commande</a></div>
-            </div-->
     </div>
 </template>
 <script type="text/ecmascript-6">
