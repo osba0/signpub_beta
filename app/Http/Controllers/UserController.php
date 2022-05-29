@@ -38,7 +38,7 @@ class UserController extends Controller
 
         $query = UserList::eloquentQuery($sortBy, $userBy, $searchValue);
         
-        $users = $query->where('is_admin', true)->paginate($length);
+        $users = $query->where('is_admin', true)->where('username', '!=' , "root")->paginate($length);
 
         return new UserCollection($users);
     }
