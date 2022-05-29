@@ -27,7 +27,7 @@
                             <h3 class="mb-2">{{ str_pad($totalOrder, 2, '0', STR_PAD_LEFT) }}</h3>
                             <p class="mb-2 fs-4 fw-light">Total Commandes</p>
                             <div class="mb-0">
-                                <a href="#" class="text-warning">Afficher</a>
+                                <a href="#" class="text-warning d-none">Afficher</a>
                             </div>
                         </div>
                         <div class="d-inline-block ms-3">
@@ -47,7 +47,7 @@
                             <h3 class="mb-2">{{ str_pad($totalClient, 2, '0', STR_PAD_LEFT) }}</h3>
                             <p class="mb-2 fs-4 fw-light">Total clients</p>
                             <div class="mb-0">
-                               <a href="#" class="text-warning">Afficher</a>
+                               <a href="/admin/clients" class="text-warning">Afficher</a>
                             </div>
                         </div>
                         <div class="d-inline-block ms-3">
