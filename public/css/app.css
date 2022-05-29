@@ -22849,6 +22849,16 @@ footer {
     top: 15px;
   }
 
+  .filtreTireur {
+    flex-direction: column;
+  }
+
+  .filtreTireur > div {
+    margin-bottom: 15px;
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
   .dasboard-client > DIV p {
     font-size: 16px !important;
   }
