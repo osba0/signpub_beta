@@ -33,7 +33,7 @@ class ClientController extends Controller
         $clients = $query->leftJoin('account_types', 'clients.account_type_id', '=', 'account_types.id')
         ->leftJoin('users', 'clients.user', '=', 'users.id')
         ->leftJoin('orders', 'clients.user', '=', 'orders.user_id')
-        ->select('clients.*', 'account_types.name as typeCompte', 'users.name as name','users.last_seen as lastSee','users.username as username', DB::raw('count(orders.user_id) as total_cmd'), )->paginate($length);
+        ->select('clients.*', 'account_types.name as typeCompte', 'users.name as name','users.last_seen as lastSee','users.username as username', DB::raw('count(orders.user_id) as total_cmd'), )->where("is_admin", 0)->paginate($length);
 
         
         //$clients = $query->where('id', true)->paginate($length);
