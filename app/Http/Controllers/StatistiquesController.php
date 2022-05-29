@@ -32,7 +32,7 @@ class StatistiquesController extends Controller
     {
         $users =User::where('is_admin', true)->get();
 
-        $tireurs = []; $tireurs = [];
+        $tireurs = []; $tireursID = [];
         foreach($users as $user){
             if($user->hasRole(UserRole::ROLE_SALLE_TIRAGE_ROULEAU) || $user->hasRole(UserRole::ROLE_SALLE_TIRAGE_FEUILLE) || $user->hasRole(UserRole::ROLE_SALLE_DECOUPE)){
                   $tireurs[] = [
