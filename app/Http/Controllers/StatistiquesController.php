@@ -54,6 +54,7 @@ class StatistiquesController extends Controller
         ->groupBy('users.id')
         ->select( 
             DB::raw('SUM(orders.long * orders.larg) as total_surface'), 
+            DB::raw('SUM(orders.unit) as total_unite'), 
             'users.name as user')->whereBetween('log_orders.created_at', [request('filtre.dateDebut'), request('filtre.dateFin')]);
         if(request('filtre.tireur')!=""){
             

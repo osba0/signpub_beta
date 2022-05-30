@@ -44,14 +44,15 @@
         <div class="row justify-content-center mt-3">
             <div class="col-md-7">
                 <table class="border table table-striped">
-                    <thead><tr><td>Tireur</td><td>Surface</td></tr></thead>
+                    <thead><tr><td>Tireur</td><td>Total Tirage</td><td>Surface Totale</td></tr></thead>
                     <tbody>
                         <tr v-for="result in tableData">
                             <td>{{result.user}}</td>
+                            <td>{{result.total_unite}}</td>
                             <td>{{result.total_surface}} m<sup>2</sup></td>
                         </tr>
                          <tr v-if="tableData.length == 0">
-                            <td colspan="2">Aucun résultat</td>
+                            <td colspan="3">Aucun résultat</td>
                             
                         </tr>
                     </tbody>
