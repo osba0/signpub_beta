@@ -30,7 +30,8 @@ class ClientResource extends JsonResource
             'total_cmd' => $this->total_cmd,
             'is_online' => (Cache::has('user-is-online-' . $this->user)? ' <span class="text-success text-nowrap fw-bold">En Ligne</span>' : ' <span class="text-danger text-nowrap fw-bold">Hors Ligne</span>').' '.($this->lastSee!=""?Carbon::parse($this->lastSee)->diffForHumans():''),
             'created_at' => Carbon::parse($this->created_at)->format('d/m/Y H:m'),
-            'username' => $this->username
+            'username' => $this->username,
+            'user' => $this->user,
             
         ];
     }

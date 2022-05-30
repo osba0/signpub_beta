@@ -5421,7 +5421,8 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
 
       axios.put(this.route, {
         user: this.user,
-        infos: this.infoClient
+        infos: this.infoClient,
+        isAdmin: this.isAdmin
       }).then(function (response) {
         var self = _this;
         console.log(response);
@@ -5518,6 +5519,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "UserDataTable",
   props: {
@@ -5571,13 +5581,10 @@ __webpack_require__.r(__webpack_exports__);
         label: 'Date inscription',
         name: 'created_at',
         orderable: false
-      }
-      /*,
-      {
-         label: 'Action',
-         orderable: false,
-      },*/
-      ],
+      }, {
+        label: 'Action',
+        orderable: false
+      }],
       filters: {
         search: '',
         length: 25
@@ -5600,6 +5607,33 @@ __webpack_require__.r(__webpack_exports__);
     },
     paginationChangePage: function paginationChangePage(page) {
       return this.$refs.orderTable.paginationChangePage(page);
+    },
+    deleteClient: function deleteClient(user) {
+      Swal.fire({
+        title: "Etes-vous sûr de vouloir supprimé <u>" + user.name + "</u>?",
+        text: "La suppression est définitive!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Oui, supprimé!'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          axios["delete"]('clients/delete-client/' + user.user).then(function (response) {
+            if (response.data.code == 0) {
+              Swal.fire({
+                title: 'Supprimé!',
+                text: user.name + ' a été supprimé.',
+                icon: 'success'
+              }).then(function (result) {
+                location.reload();
+              });
+            } else {
+              Swal.fire('Error!', '', 'error');
+            }
+          })["catch"](function (error) {});
+        }
+      });
     }
   },
   watch: {
@@ -7155,6 +7189,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "UserDataTable",
   props: {
@@ -7202,6 +7245,9 @@ __webpack_require__.r(__webpack_exports__);
         label: 'Date',
         name: 'created_at',
         orderable: false
+      }, {
+        label: 'Action',
+        orderable: false
       }],
       filters: {
         search: '',
@@ -7225,6 +7271,33 @@ __webpack_require__.r(__webpack_exports__);
     },
     paginationChangePage: function paginationChangePage(page) {
       return this.$refs.orderTable.paginationChangePage(page);
+    },
+    deleteEmploye: function deleteEmploye(user) {
+      Swal.fire({
+        title: "Etes-vous sûr de vouloir supprimé <u>" + user.name + "</u>?",
+        text: "La suppression est définitive!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Oui, supprimé!'
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          axios["delete"]('users/delete-user/' + user.id).then(function (response) {
+            if (response.data.code == 0) {
+              Swal.fire({
+                title: 'Supprimé!',
+                text: user.name + ' a été supprimé.',
+                icon: 'success'
+              }).then(function (result) {
+                location.reload();
+              });
+            } else {
+              Swal.fire('Error!', '', 'error');
+            }
+          })["catch"](function (error) {});
+        }
+      });
     }
   },
   watch: {
@@ -75529,7 +75602,7 @@ var render = function () {
                           "td",
                           { staticClass: "ps-2 fs-4 fw-light" },
                           [
-                            _vm.isAdmin == 0 && _vm.is_modify
+                            _vm.is_modify
                               ? [
                                   _c("input", {
                                     directives: [
@@ -75795,42 +75868,40 @@ var render = function () {
                 ]
               ),
               _vm._v(" "),
-              _vm.isAdmin == 0
-                ? _c("div", { staticClass: "pt-3" }, [
-                    !_vm.is_modify
-                      ? _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-lg btn-warning",
-                            on: { click: _vm.modify },
-                          },
-                          [_vm._v("Modifier")]
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.is_modify
-                      ? _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-lg btn-success me-3",
-                            on: { click: _vm.save },
-                          },
-                          [_vm._v("Enregister")]
-                        )
-                      : _vm._e(),
-                    _vm._v(" "),
-                    _vm.is_modify
-                      ? _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-lg btn-secondary",
-                            on: { click: _vm.cancel },
-                          },
-                          [_vm._v("Annuler")]
-                        )
-                      : _vm._e(),
-                  ])
-                : _vm._e(),
+              _c("div", { staticClass: "pt-3" }, [
+                !_vm.is_modify
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-lg btn-warning",
+                        on: { click: _vm.modify },
+                      },
+                      [_vm._v("Modifier")]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.is_modify
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-lg btn-success me-3",
+                        on: { click: _vm.save },
+                      },
+                      [_vm._v("Enregister")]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.is_modify
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-lg btn-secondary",
+                        on: { click: _vm.cancel },
+                      },
+                      [_vm._v("Annuler")]
+                    )
+                  : _vm._e(),
+              ]),
             ]),
           ]),
         ]),
@@ -75843,7 +75914,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("tr", [
-      _c("th", { staticClass: "py-1" }, [_vm._v("Nom & Prénom ")]),
+      _c("th", { staticClass: "py-1" }, [_vm._v("Nom & Prénom")]),
     ])
   },
   function () {
@@ -75929,144 +76000,193 @@ var render = function () {
           filters: _vm.filters,
           translate: _vm.translate,
         },
-        scopedSlots: _vm._u([
-          {
-            key: "filters",
-            fn: function (ref) {
-              var tableFilters = ref.tableFilters
-              var perPage = ref.perPage
-              var tableData = ref.tableData
-              return _c("div", {}, [
-                _c("div", { staticClass: "row mb-2" }, [
-                  _c("div", { staticClass: "col-md-3" }, [
-                    _c(
-                      "select",
-                      {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.filters.length,
-                            expression: "filters.length",
-                          },
-                        ],
-                        staticClass: "form-control form-select",
-                        on: {
-                          change: [
-                            function ($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function (o) {
-                                  return o.selected
-                                })
-                                .map(function (o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
-                              _vm.$set(
-                                _vm.filters,
-                                "length",
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
-                              )
-                            },
-                            function ($event) {
-                              return _vm.selectLength($event)
-                            },
-                          ],
-                        },
-                      },
-                      _vm._l(perPage, function (size, index) {
-                        return _c("option", { domProps: { value: size } }, [
-                          _vm._v(
-                            "\n                         " +
-                              _vm._s(size) +
-                              "\n                        "
-                          ),
-                        ])
-                      }),
-                      0
-                    ),
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      staticClass:
-                        "col-md-9 d-flex align-items-center justify-content-end d-none",
-                    },
-                    [
-                      _c("div", { staticClass: "d-flex align-items-center" }, [
-                        _c("input", {
+        scopedSlots: _vm._u(
+          [
+            {
+              key: "filters",
+              fn: function (ref) {
+                var tableFilters = ref.tableFilters
+                var perPage = ref.perPage
+                var tableData = ref.tableData
+                return _c("div", {}, [
+                  _c("div", { staticClass: "row mb-2" }, [
+                    _c("div", { staticClass: "col-md-3" }, [
+                      _c(
+                        "select",
+                        {
                           directives: [
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.filters.search,
-                              expression: "filters.search",
+                              value: _vm.filters.length,
+                              expression: "filters.length",
                             },
                           ],
-                          staticClass: "form-control w-200 ml-3",
-                          attrs: { name: "name", placeholder: "Search for ID" },
-                          domProps: { value: _vm.filters.search },
+                          staticClass: "form-control form-select",
                           on: {
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.$set(
-                                _vm.filters,
-                                "search",
-                                $event.target.value
-                              )
-                            },
+                            change: [
+                              function ($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function (o) {
+                                    return o.selected
+                                  })
+                                  .map(function (o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.filters,
+                                  "length",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              },
+                              function ($event) {
+                                return _vm.selectLength($event)
+                              },
+                            ],
                           },
-                        }),
-                      ]),
-                    ]
-                  ),
-                ]),
-              ])
-            },
-          },
-          {
-            key: "body",
-            fn: function (ref) {
-              var data = ref.data
-              return _c(
-                "tbody",
-                {},
-                _vm._l(data, function (item) {
-                  return _c(
-                    "tr",
-                    { key: item.id, staticClass: "tr-data" },
-                    _vm._l(_vm.columns, function (column) {
-                      return _c(
-                        "td",
-                        {
-                          key: column.name,
-                          staticClass: "laravel-vue-datatable-td",
                         },
-                        [
-                          _c("data-table-cell", {
-                            attrs: {
-                              value: item,
-                              name: column.name,
-                              meta: column.meta,
-                            },
-                          }),
-                        ],
-                        1
-                      )
-                    }),
-                    0
-                  )
-                }),
-                0
-              )
+                        _vm._l(perPage, function (size, index) {
+                          return _c("option", { domProps: { value: size } }, [
+                            _vm._v(
+                              "\n                         " +
+                                _vm._s(size) +
+                                "\n                        "
+                            ),
+                          ])
+                        }),
+                        0
+                      ),
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "col-md-9 d-flex align-items-center justify-content-end d-none",
+                      },
+                      [
+                        _c(
+                          "div",
+                          { staticClass: "d-flex align-items-center" },
+                          [
+                            _c("input", {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.filters.search,
+                                  expression: "filters.search",
+                                },
+                              ],
+                              staticClass: "form-control w-200 ml-3",
+                              attrs: {
+                                name: "name",
+                                placeholder: "Search for ID",
+                              },
+                              domProps: { value: _vm.filters.search },
+                              on: {
+                                input: function ($event) {
+                                  if ($event.target.composing) {
+                                    return
+                                  }
+                                  _vm.$set(
+                                    _vm.filters,
+                                    "search",
+                                    $event.target.value
+                                  )
+                                },
+                              },
+                            }),
+                          ]
+                        ),
+                      ]
+                    ),
+                  ]),
+                ])
+              },
             },
-          },
-        ]),
+            {
+              key: "body",
+              fn: function (ref) {
+                var data = ref.data
+                return _c(
+                  "tbody",
+                  {},
+                  _vm._l(data, function (item) {
+                    return _c(
+                      "tr",
+                      { key: item.id, staticClass: "tr-data" },
+                      _vm._l(_vm.columns, function (column) {
+                        return _c(
+                          "td",
+                          {
+                            key: column.name,
+                            staticClass: "laravel-vue-datatable-td",
+                          },
+                          [
+                            _c("data-table-cell", {
+                              attrs: {
+                                value: item,
+                                name: column.name,
+                                meta: column.meta,
+                              },
+                            }),
+                            _vm._v(" "),
+                            column.label === "Action"
+                              ? _vm._t("default", function () {
+                                  return [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "justify-content-start align-items-center d-flex",
+                                      },
+                                      [
+                                        _c(
+                                          "button",
+                                          {
+                                            staticClass: "btn text-danger",
+                                            attrs: { title: "Supprimer" },
+                                            on: {
+                                              click: function ($event) {
+                                                return _vm.deleteClient(item)
+                                              },
+                                            },
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass:
+                                                  "material-symbols-outlined",
+                                              },
+                                              [_vm._v("delete")]
+                                            ),
+                                          ]
+                                        ),
+                                      ]
+                                    ),
+                                  ]
+                                })
+                              : _vm._e(),
+                          ],
+                          2
+                        )
+                      }),
+                      0
+                    )
+                  }),
+                  0
+                )
+              },
+            },
+          ],
+          null,
+          true
+        ),
       }),
     ],
     1
@@ -78927,6 +79047,44 @@ var render = function () {
                                       "span",
                                       { staticClass: "font-weight-semi-bold" },
                                       [_vm._v(_vm._s(item.site_name))]
+                                    ),
+                                  ]
+                                })
+                              : _vm._e(),
+                            _vm._v(" "),
+                            column.label === "Action"
+                              ? _vm._t("default", function () {
+                                  return [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "justify-content-start align-items-center d-flex",
+                                      },
+                                      [
+                                        _c(
+                                          "button",
+                                          {
+                                            staticClass: "btn text-danger",
+                                            attrs: { title: "Supprimer" },
+                                            on: {
+                                              click: function ($event) {
+                                                return _vm.deleteEmploye(item)
+                                              },
+                                            },
+                                          },
+                                          [
+                                            _c(
+                                              "span",
+                                              {
+                                                staticClass:
+                                                  "material-symbols-outlined",
+                                              },
+                                              [_vm._v("delete")]
+                                            ),
+                                          ]
+                                        ),
+                                      ]
                                     ),
                                   ]
                                 })

@@ -9,10 +9,10 @@
         			<table class="border table table-striped fs-6 mb-0 ">
         				<tbody>
         				<tr>
-        					<th class="py-1">Nom & Prénom </th>
+        					<th class="py-1">Nom & Prénom</th>
         				</tr>
         				<tr><td class="ps-2 fs-4 fw-light">
-	        				<template v-if="isAdmin==0 && is_modify">
+	        				<template v-if="is_modify">
 		        				<input type="text" name="name" v-model="user.name">
 		        			</template>
 		        			<template v-else>
@@ -78,7 +78,7 @@
         				</template>
         				</tbody>
         			</table>
-        			<div v-if="isAdmin==0" class="pt-3">
+        			<div  class="pt-3">
         				<button class="btn btn-lg btn-warning" v-if="!is_modify" @click="modify">Modifier</button>
         				<button class="btn btn-lg btn-success me-3" v-if="is_modify" @click="save">Enregister</button>
         				<button class="btn btn-lg btn-secondary" v-if="is_modify" @click="cancel">Annuler</button>
@@ -145,7 +145,7 @@ export default {
         	this.is_modify = false;
         },
         save(){
-        	 axios.put(this.route, {user: this.user, infos: this.infoClient})
+        	 axios.put(this.route, {user: this.user, infos: this.infoClient, isAdmin: this.isAdmin})
                 .then(response => {
                     let self = this;
                     console.log(response);

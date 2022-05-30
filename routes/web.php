@@ -43,9 +43,12 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
         Route::get('users/user-list', [UserController::class, 'getListUser'])->name('user.list');
         Route::get('users/user-create', [UserController::class, 'create'])->name('user.create');
         Route::post('users/user-store', [UserController::class, 'store'])->name('user.store');
+        Route::delete('admin/users/delete-user/{id}', [UserController::class, 'deleteUser']); 
         
         Route::get('admin/clients', [ClientController::class, 'index'])->name('index.client');
         Route::get('clients/client-list', [ClientController::class, 'getListClient'])->name('client.list');
+
+        Route::delete('admin/clients/delete-client/{id}', [ClientController::class, 'deleteClient']); 
 
         Route::get('admin/orders/{id}/edit', [OrderController::class, 'editAdmin'])->name('admin.order.edit');
 
@@ -63,6 +66,7 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
 
 
         Route::post('admin/statistique/search', [StatistiquesController::class, 'getSurfaceTireur']); 
+
     });
 
     Route::middleware(['role:' . UserRole::ROLE_SECRETARIAT])->group(function () {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ClientCollection;
 use App\Models\User;
 use App\Models\Client;
+use App\Models\Order;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -41,14 +42,39 @@ class ClientController extends Controller
         return new ClientCollection($clients);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+    public function deleteClient(Request $request){
+     
+        
+
+      
+
+                // Get all order of the client
+                $allorder = Order::where('user_id', request('id'))->get()->toArray();
+                $orderId=[];
+                foreach($allorder as $order){
+                    $orderId[] = $order["id"];
+                }
+                // Supprimer notif 
+                foreach(auth()->user()->notifications as $notification){
+                    if(in_array($notification->data['order_id'], $orderId)){
+
+                        DB::table('notifications')->where('data->order_id', $notification->data['order_id'])->delete();
+                       
+                    }
+                }
+                // Supprimer commande de l'utilisateur 
+                $resp = Order::whereIn('id', $orderId)->delete(); 
+
+
+                $resp = User::where('id', request('id'))->delete();
+
+            return response([
+                "code" => 0,
+                "message" => "OK"
+            ]);
+
+    
+    
     }
 
     /**

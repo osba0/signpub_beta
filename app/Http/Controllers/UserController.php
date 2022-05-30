@@ -7,6 +7,7 @@ use App\Models\UserList;
 use App\Models\UserRole;
 use App\Models\User;
 use App\Models\Client;
+use App\Models\LogOrder;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\UserResource;
 
@@ -160,29 +161,44 @@ class UserController extends Controller
             "name" => request('user.name')
            ]);
 
-        $client = Client::where('user', request('user.id'));
+       if(request('user.isAdmin')==0){
+            $client = Client::where('user', request('user.id'));
 
-        $userUpdate = $client->update([
-            "company" => request('infos.enterprise'),
-            "phone_code" => request('infos.phone_code'),
-            "phone" => request('infos.phoneUnique'),
-            "address" => request('infos.address')
-        ]);
+            $userUpdate = $client->update([
+                "company" => request('infos.enterprise'),
+                "phone_code" => request('infos.phone_code'),
+                "phone" => request('infos.phoneUnique'),
+                "address" => request('infos.address')
+            ]);
+        }
 
-         return response([
+        return response([
                 "code" => 0,
                 "message" => "OK"
             ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    public function deleteUser(Request $request){
+     
+        $resp = User::where('id', request('id'))->delete();
+
+        if($resp){
+
+
+            $resp = LogOrder::where('user_id', request('id'))->delete();
+
+            return response([
+                "code" => 0,
+                "message" => "OK"
+            ]);
+
+       }else{
+
+            return response([
+                "code" => 1,
+                "message" => "Erreur!"
+            ]);
+       }
+    
     }
 }

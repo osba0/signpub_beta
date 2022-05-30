@@ -47,6 +47,13 @@
                     <slot v-if="column.label === 'Site'">
                        <span class="font-weight-semi-bold">{{ item.site_name }}</span>
                     </slot>
+                    <slot v-if="column.label === 'Action'">
+                    <div class="justify-content-start align-items-center d-flex">
+                         <button class="btn text-danger" title="Supprimer" @click="deleteEmploye(item)"><span class="material-symbols-outlined">delete</span></button>
+                                               
+                            
+                       </div>
+                    </slot>
                 </td>
             </tr>
             </tbody>
@@ -55,7 +62,7 @@
     </div>
 </template>
 <script type="text/ecmascript-6">
-
+const Swal = require('sweetalert2');
 export default { 
     name: "UserDataTable",    
     
@@ -110,6 +117,10 @@ export default {
                     label: 'Date',
                     name: 'created_at',
                     orderable: false,
+                },
+                {
+                    label: 'Action',
+                    orderable: false,
                 }
             ],
             filters: {
@@ -135,6 +146,45 @@ export default {
         paginationChangePage(page) {
             return this.$refs.orderTable.paginationChangePage(page);
         },
+         deleteEmploye(user){
+            Swal.fire({
+              title: "Etes-vous sûr de vouloir supprimé <u>"+user.name+"</u>?",
+              text: "La suppression est définitive!",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonColor: '#3085d6',
+              cancelButtonColor: '#d33',
+              confirmButtonText: 'Oui, supprimé!'
+            }).then((result) => {
+              if (result.isConfirmed) {
+
+
+                axios.delete('users/delete-user/'+user.id)
+                .then(response => {
+                    if(response.data.code==0){
+                         Swal.fire({
+                            title: 'Supprimé!',
+                            text:   user.name+' a été supprimé.',
+                            icon:  'success'
+                            }).then((result) => {
+                        location.reload();
+                    });
+
+                    }else{
+                        Swal.fire(
+                          'Error!',
+                        '',
+                          'error'
+                        ); 
+                    }
+                })
+                .catch(error => {
+                    
+                });
+               
+              }
+            });
+        }
     },
     watch: {
         activeStatus: function () {
