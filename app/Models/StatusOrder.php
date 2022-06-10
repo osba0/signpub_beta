@@ -52,7 +52,7 @@ class StatusOrder extends Model
             static::INITIE  => 'Validation',
             static::EN_SALLE_DE_TIRAGE => 'Salle de tirage',
             static::EN_FINITION => 'Finition',
-            static::ATTENTE_POUR_LIVRAISON => 'Attente de Livraison',
+            static::ATTENTE_POUR_LIVRAISON => 'Livré',
             static::LIVRE => 'Livré'
         ];
     }
