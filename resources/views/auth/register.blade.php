@@ -16,7 +16,7 @@
 
                             <div class="col-md-6 d-flex align-items-center">
                                 <div class="bg-light px-2 rounded me-3 d-flex">
-                                    <input id="particulier" type="radio"  value="1" class="form-check-input" name="type-compte"> 
+                                    <input id="particulier" type="radio"  value="1" checked class="form-check-input" name="type-compte"> 
                                     <label class="form-check-label fw-light ps-2" for="particulier">
                                         Particulier
                                     </label>  
