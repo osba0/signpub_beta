@@ -61,7 +61,7 @@ class StatusOrder extends Model
      * @param $status
      * @return string
      */
-    public function getValueStatusOrder($status)
+    public static function getValueStatusOrder($status)
     {
         $allStatus = static::getStatusOrder();
         foreach($allStatus as $key => $value) {
