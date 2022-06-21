@@ -18,7 +18,7 @@ class StatusOrder extends Model
     /***
      * @return array
      */
-    public function getStatusOrder()
+    public static function getStatusOrder()
     {
         return [
             static::INITIE  => 'En cours de validation',
