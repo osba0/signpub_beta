@@ -146,8 +146,11 @@ class OrderController extends Controller
         if($user->hasRole(UserRole::ROLE_SALLE_TIRAGE_ROULEAU) || $user->hasRole(UserRole::ROLE_SALLE_TIRAGE_FEUILLE)){
            $query = $query->where("status", StatusOrder::EN_SALLE_DE_TIRAGE);
         }
-         if($user->hasRole(UserRole::ROLE_SALLE_DECOUPE)){
+        if($user->hasRole(UserRole::ROLE_SALLE_DECOUPE)){
            $query = $query->where("status", StatusOrder::EN_SALLE_DE_DECOUPE);
+        }
+        if($user->hasRole(UserRole::ROLE_IMPRESSION_DIRECTE)){
+           $query = $query->where("status", StatusOrder::IMPRESSION_DIRECTE);
         }
         if($user->hasRole(UserRole::ROLE_FINITION)){
            $query = $query->where("status", StatusOrder::EN_FINITION);
@@ -178,6 +181,12 @@ class OrderController extends Controller
             $isdecoupe=true; 
         }
 
+        $isimpression=0; 
+
+        if($orderCurrent['traitement'] == StatusOrder::IMPRESSION_DIRECTE){
+            $isimpression=true; 
+        }
+
         $data = new OrderResource($order);
 
         $status = StatusOrder::getStatusOrder();
@@ -196,7 +205,7 @@ class OrderController extends Controller
                           ];
         }
 
-        return view('admin.order.show', compact('data', 'status', 'statusLog', 'orderLogs', 'isdecoupe'));
+        return view('admin.order.show', compact('data', 'status', 'statusLog', 'orderLogs', 'isdecoupe', 'isimpression'));
     }
 
 
@@ -222,6 +231,12 @@ class OrderController extends Controller
             $isdecoupe=true; 
         }
 
+         $isimpression=0; 
+
+        if($orderCurrent['traitement'] == StatusOrder::IMPRESSION_DIRECTE){
+            $isimpression=true; 
+        }
+
 
 
         $data = new OrderResource($order);
@@ -242,7 +257,7 @@ class OrderController extends Controller
                           ];
         }
 
-        return view('order.show', compact('data', 'status', 'statusLog', 'orderLogs', 'isdecoupe'));
+        return view('order.show', compact('data', 'status', 'statusLog', 'orderLogs', 'isdecoupe', 'isimpression'));
     }
 
 
@@ -299,6 +314,9 @@ class OrderController extends Controller
            }
            if($oldStatus['traitement'] == StatusOrder::EN_SALLE_DE_DECOUPE){
                 $status = StatusOrder::EN_SALLE_DE_DECOUPE; 
+           }
+           if($oldStatus['traitement'] == StatusOrder::IMPRESSION_DIRECTE){
+                $status = StatusOrder::IMPRESSION_DIRECTE; 
            }
         }
 
@@ -381,7 +399,7 @@ class OrderController extends Controller
                 'type_id'    => request('type_id'),
                 'long'    => floatval(str_replace(',', '.', $longeur)),
                 'larg'    => floatval(str_replace(',', '.', $largeur)),
-                'comment' => (request('commentaire')==""? ' ':request('commentaire')),
+                'comment' => (request('comment')==""? ' ':request('comment')),
                 'unit'    => request('unit'),
                 'autre_matiere' => (request('autre_matiere')==""? ' ':request('autre_matiere'))
                ]);

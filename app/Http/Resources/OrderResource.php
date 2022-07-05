@@ -22,7 +22,7 @@ class OrderResource extends JsonResource
             'long' => $this->long,
             'larg' => $this->larg,
             'unit' => $this->unit,
-            'comment' => Str::limit($this->comment, 15),
+            'comment' => Str::limit($this->comment, 30),
             'full_comment' => $this->comment,
             'status' => $this->status,
             'user' => $this->user->name,

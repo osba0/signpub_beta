@@ -21,6 +21,7 @@
                 :order-logs= '@json($orderLogs)'
                 :status-log = '@json($statusLog)'
                 :isdecoupe-order = {{$isdecoupe}} 
+                :isimpression-order = {{$isimpression}} 
                 >
                 </order-show-client>
             </div>

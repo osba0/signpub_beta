@@ -22714,6 +22714,16 @@ body {
   --bs-body-bg: #f8fafc;
 }
 
+.statePosition {
+  right: 15px;
+  top: 15px;
+}
+
+.maxHeightComment {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
 .bg-dark {
   --bs-bg-opacity: 1;
   background-color: var(--bs-dark) !important;

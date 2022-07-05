@@ -58,6 +58,10 @@
                     <slot v-if="column.label === 'Dimension'">
                        <span class="font-weight-semi-bold">{{ (item.long * item.larg).toFixed(2) }}m<sup>2</sup> ({{ item.long }}x{{ item.larg }})</span>
                     </slot>
+                    <slot v-if="column.label === 'Commentaire'">
+                          <a class="btn btn-default" data-bs-toggle="modal" title="Cliquer pour afficher les commentaires" data-bs-target="#showComment" @click="showComment(item)">
+                           {{ item.comment }}</a>
+                    </slot>
                      <slot v-if="column.label === 'Etat'">
 
                         <div v-for="(status, value, index) in orderStatus" v-bind:value="index">
@@ -89,6 +93,25 @@
 
         </data-table>
         
+          <!-- Modal -->
+        <div class="modal fade" id="showComment" tabindex="-1" aria-labelledby="showCommentLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="showCommentLabel">Commande N°{{ commentDetail.id }} | Commentaire</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body ps-4">
+                <div class="mt-3 maxHeightComment">
+                   {{ commentDetail.comment }}
+                </div>
+              </div>
+              <div class="modal-footer d-flex justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
@@ -132,7 +155,7 @@ export default {
                 },
                 {
                     label: 'Commentaire',
-                    name: 'comment',
+                   // name: 'comment',
                     orderable: false,
                 },
                 {
@@ -166,7 +189,11 @@ export default {
                 }
             },
             tableData: {}, 
-            etatColor: ['secondary fw-normal', 'info text-dark fw-normal', 'warning fw-normal', 'danger fw-normal', 'success fw-normal', 'primary fw-normal']
+            etatColor: ['secondary fw-normal', 'info text-dark fw-normal', 'warning fw-normal', 'danger fw-normal', 'success fw-normal', 'primary fw-normal', 'dark text-white fw-normal'],
+            commentDetail: {
+                id: '',
+                comment: ''
+            }
         };
     },
     methods: {
@@ -179,6 +206,10 @@ export default {
         },
         paginationChangePage(page) {
             return this.$refs.orderTable.paginationChangePage(page);
+        },
+        showComment(cmd){
+            this.commentDetail.id= cmd.id;
+            this.commentDetail.comment = cmd.full_comment;
         },
         deleteOrder(order){
             Swal.fire({

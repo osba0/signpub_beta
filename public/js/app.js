@@ -6364,6 +6364,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -6431,7 +6454,7 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
         orderable: false
       }, {
         label: 'Commentaire',
-        name: 'comment',
+        //name: 'comment',
         orderable: false
       }, {
         label: 'Status',
@@ -6464,8 +6487,12 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
         phone: '',
         date: ''
       },
-      etatColor: ['secondary fw-normal', 'info text-dark fw-normal', 'warning fw-normal', 'danger fw-normal', 'success fw-normal', 'primary fw-normal'],
-      isloading: false
+      etatColor: ['secondary fw-normal', 'info text-dark fw-normal', 'warning fw-normal', 'danger fw-normal', 'success fw-normal', 'primary fw-normal', 'dark fw-normal'],
+      isloading: false,
+      commentDetail: {
+        id: '',
+        comment: ''
+      }
     };
   },
   methods: {
@@ -6478,6 +6505,10 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
     },
     paginationChangePage: function paginationChangePage(page) {
       return this.$refs.orderTable.paginationChangePage(page);
+    },
+    showComment: function showComment(cmd) {
+      this.commentDetail.id = cmd.id;
+      this.commentDetail.comment = cmd.full_comment;
     },
     showConfirm: function showConfirm(id, user_id) {
       var _this = this;
@@ -6740,6 +6771,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {},
   name: "OrderShow",
@@ -6764,6 +6802,10 @@ __webpack_require__.r(__webpack_exports__);
       required: true
     },
     isdecoupeOrder: {
+      type: Number,
+      required: true
+    },
+    isimpressionOrder: {
       type: Number,
       required: true
     }
@@ -7724,6 +7766,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -7767,7 +7832,7 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
         orderable: false
       }, {
         label: 'Commentaire',
-        name: 'comment',
+        // name: 'comment',
         orderable: false
       }, {
         label: 'Date',
@@ -7798,7 +7863,11 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
         }
       },
       tableData: {},
-      etatColor: ['secondary fw-normal', 'info text-dark fw-normal', 'warning fw-normal', 'danger fw-normal', 'success fw-normal', 'primary fw-normal']
+      etatColor: ['secondary fw-normal', 'info text-dark fw-normal', 'warning fw-normal', 'danger fw-normal', 'success fw-normal', 'primary fw-normal', 'dark text-white fw-normal'],
+      commentDetail: {
+        id: '',
+        comment: ''
+      }
     };
   },
   methods: {
@@ -7811,6 +7880,10 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
     },
     paginationChangePage: function paginationChangePage(page) {
       return this.$refs.orderTable.paginationChangePage(page);
+    },
+    showComment: function showComment(cmd) {
+      this.commentDetail.id = cmd.id;
+      this.commentDetail.comment = cmd.full_comment;
     },
     deleteOrder: function deleteOrder(order) {
       Swal.fire({
@@ -8208,6 +8281,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {},
   name: "OrderShow",
@@ -8232,6 +8312,10 @@ __webpack_require__.r(__webpack_exports__);
       required: true
     },
     isdecoupeOrder: {
+      type: Number,
+      required: true
+    },
+    isimpressionOrder: {
       type: Number,
       required: true
     }
@@ -77593,6 +77677,36 @@ var render = function () {
                                 })
                               : _vm._e(),
                             _vm._v(" "),
+                            column.label === "Commentaire"
+                              ? _vm._t("default", function () {
+                                  return [
+                                    _c(
+                                      "a",
+                                      {
+                                        staticClass: "btn btn-default",
+                                        attrs: {
+                                          "data-bs-toggle": "modal",
+                                          title:
+                                            "Cliquer pour afficher les commentaires",
+                                          "data-bs-target": "#showComment",
+                                        },
+                                        on: {
+                                          click: function ($event) {
+                                            return _vm.showComment(item)
+                                          },
+                                        },
+                                      },
+                                      [
+                                        _vm._v(
+                                          "\n                               " +
+                                            _vm._s(item.comment)
+                                        ),
+                                      ]
+                                    ),
+                                  ]
+                                })
+                              : _vm._e(),
+                            _vm._v(" "),
                             column.label === "Action"
                               ? _vm._t("default", function () {
                                   return [
@@ -77897,6 +78011,62 @@ var render = function () {
           ]),
         ]
       ),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "modal fade",
+          attrs: {
+            id: "showComment",
+            tabindex: "-1",
+            "aria-labelledby": "showCommentLabel",
+            "aria-hidden": "true",
+          },
+        },
+        [
+          _c("div", { staticClass: "modal-dialog modal-lg" }, [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    staticClass: "modal-title",
+                    attrs: { id: "showCommentLabel" },
+                  },
+                  [
+                    _vm._v(
+                      "Commande N°" +
+                        _vm._s(_vm.commentDetail.id) +
+                        " | Commentaire"
+                    ),
+                  ]
+                ),
+                _vm._v(" "),
+                _c("button", {
+                  staticClass: "btn-close",
+                  attrs: {
+                    type: "button",
+                    "data-bs-dismiss": "modal",
+                    "aria-label": "Close",
+                  },
+                }),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body ps-4" }, [
+                _c("div", { staticClass: "mt-3 maxHeightComment" }, [
+                  _vm._v(
+                    "\n               " +
+                      _vm._s(_vm.commentDetail.comment) +
+                      "\n            "
+                  ),
+                ]),
+              ]),
+              _vm._v(" "),
+              _vm._m(2),
+            ]),
+          ]),
+        ]
+      ),
     ],
     1
   )
@@ -77947,6 +78117,25 @@ var staticRenderFns = [
         [_vm._v("Fermer")]
       ),
     ])
+  },
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "modal-footer d-flex justify-content-center" },
+      [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-secondary",
+            attrs: { type: "button", "data-bs-dismiss": "modal" },
+          },
+          [_vm._v("Fermer")]
+        ),
+      ]
+    )
   },
 ]
 render._withStripped = true
@@ -78047,7 +78236,7 @@ var render = function () {
                   ]
                 ),
                 _vm._v(" "),
-                _vm.isdecoupeOrder != 1
+                _vm.isdecoupeOrder != 1 && _vm.isimpressionOrder != 1
                   ? _c(
                       "li",
                       {
@@ -78110,12 +78299,16 @@ var render = function () {
                         staticClass:
                           "rounded px-3 py-2 me-3  border-3 position-relative",
                         class:
-                          _vm.order.status > 2 && _vm.order.status != 21
+                          _vm.order.status > 2 &&
+                          _vm.order.status != 22 &&
+                          _vm.order.status != 21
                             ? "text-center text-dark border-bottom border-success  bg-light-green"
                             : "bg-light text-secondary border-bottom fw-light",
                       },
                       [
-                        _vm.order.status > 2 && _vm.order.status != 21
+                        _vm.order.status > 2 &&
+                        _vm.order.status != 21 &&
+                        _vm.order.status != 22
                           ? _c(
                               "span",
                               {
@@ -78161,18 +78354,82 @@ var render = function () {
                     )
                   : _vm._e(),
                 _vm._v(" "),
+                _vm.isimpressionOrder == 1
+                  ? _c(
+                      "li",
+                      {
+                        staticClass:
+                          "rounded px-3 py-2 me-3  border-3 position-relative",
+                        class:
+                          _vm.order.status > 2 &&
+                          _vm.order.status != 21 &&
+                          _vm.order.status != 22
+                            ? "text-center text-dark border-bottom border-success  bg-light-green"
+                            : "bg-light text-secondary border-bottom fw-light",
+                      },
+                      [
+                        _vm.order.status > 2 &&
+                        _vm.order.status != 21 &&
+                        _vm.order.status != 22
+                          ? _c(
+                              "span",
+                              {
+                                staticClass:
+                                  "material-symbols-outlined m-0 pe-2 align-middle text-success",
+                              },
+                              [_vm._v("check_circle")]
+                            )
+                          : _c(
+                              "span",
+                              {
+                                staticClass:
+                                  "material-symbols-outlined m-0 pe-2 align-middle",
+                              },
+                              [_vm._v("radio_button_checked")]
+                            ),
+                        _vm._v(" Impression Direct\n\t\t                    "),
+                        _vm.order.status == 22
+                          ? _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "progress position-absolute progress_status",
+                              },
+                              [
+                                _c("div", {
+                                  staticClass:
+                                    "progress-bar progress-bar-striped bg-success progress-bar-animated",
+                                  staticStyle: { width: "100%" },
+                                  attrs: {
+                                    role: "progressbar",
+                                    "aria-valuenow": "100",
+                                    "aria-valuemin": "0",
+                                    "aria-valuemax": "100",
+                                  },
+                                }),
+                              ]
+                            )
+                          : _vm._e(),
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
                 _c(
                   "li",
                   {
                     staticClass:
                       "rounded px-3 py-2 me-3 border-3 position-relative",
                     class:
-                      _vm.order.status > 3 && _vm.order.status != 21
+                      _vm.order.status > 3 &&
+                      _vm.order.status != 21 &&
+                      _vm.order.status != 22
                         ? "text-center text-dark border-bottom border-success  bg-light-green"
                         : "bg-light text-secondary border-bottom fw-light",
                   },
                   [
-                    _vm.order.status > 3 && _vm.order.status != 21
+                    _vm.order.status > 3 &&
+                    _vm.order.status != 21 &&
+                    _vm.order.status != 22
                       ? _c(
                           "span",
                           {
@@ -78223,12 +78480,16 @@ var render = function () {
                     staticClass:
                       "rounded px-3 py-2 me-3 border-3 position-relative",
                     class:
-                      _vm.order.status > 4 && _vm.order.status != 21
+                      _vm.order.status > 4 &&
+                      _vm.order.status != 21 &&
+                      _vm.order.status != 22
                         ? "text-center text-dark border-bottom border-success  bg-light-green"
                         : "bg-light text-secondary border-bottom fw-light",
                   },
                   [
-                    _vm.order.status > 4 && _vm.order.status != 21
+                    _vm.order.status > 4 &&
+                    _vm.order.status != 21 &&
+                    _vm.order.status != 22
                       ? _c(
                           "span",
                           {
@@ -78279,12 +78540,16 @@ var render = function () {
                     staticClass:
                       "rounded px-3 py-2 me-3 border-3 position-relative",
                     class:
-                      _vm.order.status >= 5 && _vm.order.status != 21
+                      _vm.order.status >= 5 &&
+                      _vm.order.status != 21 &&
+                      _vm.order.status != 22
                         ? "text-center text-dark border-bottom border-success  bg-light-green"
                         : "bg-light text-secondary border-bottom fw-light",
                   },
                   [
-                    _vm.order.status >= 5 && _vm.order.status != 21
+                    _vm.order.status >= 5 &&
+                    _vm.order.status != 21 &&
+                    _vm.order.status != 22
                       ? _c(
                           "span",
                           {
@@ -78484,7 +78749,7 @@ var render = function () {
                     ]),
                     _vm._v(" "),
                     _c("td", { staticClass: "ps-2" }, [
-                      _vm._v(_vm._s(_vm.order.comment)),
+                      _vm._v(_vm._s(_vm.order.full_comment)),
                     ]),
                   ]),
                 ]),
@@ -80022,6 +80287,36 @@ var render = function () {
                                   })
                                 : _vm._e(),
                               _vm._v(" "),
+                              column.label === "Commentaire"
+                                ? _vm._t("default", function () {
+                                    return [
+                                      _c(
+                                        "a",
+                                        {
+                                          staticClass: "btn btn-default",
+                                          attrs: {
+                                            "data-bs-toggle": "modal",
+                                            title:
+                                              "Cliquer pour afficher les commentaires",
+                                            "data-bs-target": "#showComment",
+                                          },
+                                          on: {
+                                            click: function ($event) {
+                                              return _vm.showComment(item)
+                                            },
+                                          },
+                                        },
+                                        [
+                                          _vm._v(
+                                            "\n                       " +
+                                              _vm._s(item.comment)
+                                          ),
+                                        ]
+                                      ),
+                                    ]
+                                  })
+                                : _vm._e(),
+                              _vm._v(" "),
                               column.label === "Etat"
                                 ? _vm._t("default", function () {
                                     return _vm._l(
@@ -80165,11 +80460,87 @@ var render = function () {
           true
         ),
       }),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "modal fade",
+          attrs: {
+            id: "showComment",
+            tabindex: "-1",
+            "aria-labelledby": "showCommentLabel",
+            "aria-hidden": "true",
+          },
+        },
+        [
+          _c("div", { staticClass: "modal-dialog modal-lg" }, [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    staticClass: "modal-title",
+                    attrs: { id: "showCommentLabel" },
+                  },
+                  [
+                    _vm._v(
+                      "Commande N°" +
+                        _vm._s(_vm.commentDetail.id) +
+                        " | Commentaire"
+                    ),
+                  ]
+                ),
+                _vm._v(" "),
+                _c("button", {
+                  staticClass: "btn-close",
+                  attrs: {
+                    type: "button",
+                    "data-bs-dismiss": "modal",
+                    "aria-label": "Close",
+                  },
+                }),
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body ps-4" }, [
+                _c("div", { staticClass: "mt-3 maxHeightComment" }, [
+                  _vm._v(
+                    "\n               " +
+                      _vm._s(_vm.commentDetail.comment) +
+                      "\n            "
+                  ),
+                ]),
+              ]),
+              _vm._v(" "),
+              _vm._m(0),
+            ]),
+          ]),
+        ]
+      ),
     ],
     1
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function () {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      { staticClass: "modal-footer d-flex justify-content-center" },
+      [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-secondary",
+            attrs: { type: "button", "data-bs-dismiss": "modal" },
+          },
+          [_vm._v("Fermer")]
+        ),
+      ]
+    )
+  },
+]
 render._withStripped = true
 
 
@@ -80637,7 +81008,7 @@ var render = function () {
                   ]
                 ),
                 _vm._v(" "),
-                _vm.isdecoupeOrder != 1
+                _vm.isdecoupeOrder != 1 && _vm.isimpressionOrder != 1
                   ? _c(
                       "li",
                       {
@@ -80700,12 +81071,16 @@ var render = function () {
                         staticClass:
                           "rounded px-3 py-2 me-3  border-3 position-relative",
                         class:
-                          _vm.order.status > 2 && _vm.order.status != 21
+                          _vm.order.status > 2 &&
+                          _vm.order.status != 22 &&
+                          _vm.order.status != 21
                             ? "text-center text-dark border-bottom border-success  bg-light-green"
                             : "bg-light text-secondary border-bottom fw-light",
                       },
                       [
-                        _vm.order.status > 2 && _vm.order.status != 21
+                        _vm.order.status > 2 &&
+                        _vm.order.status != 21 &&
+                        _vm.order.status != 22
                           ? _c(
                               "span",
                               {
@@ -80751,18 +81126,82 @@ var render = function () {
                     )
                   : _vm._e(),
                 _vm._v(" "),
+                _vm.isimpressionOrder == 1
+                  ? _c(
+                      "li",
+                      {
+                        staticClass:
+                          "rounded px-3 py-2 me-3  border-3 position-relative",
+                        class:
+                          _vm.order.status > 2 &&
+                          _vm.order.status != 21 &&
+                          _vm.order.status != 22
+                            ? "text-center text-dark border-bottom border-success  bg-light-green"
+                            : "bg-light text-secondary border-bottom fw-light",
+                      },
+                      [
+                        _vm.order.status > 2 &&
+                        _vm.order.status != 21 &&
+                        _vm.order.status != 22
+                          ? _c(
+                              "span",
+                              {
+                                staticClass:
+                                  "material-symbols-outlined m-0 pe-2 align-middle text-success",
+                              },
+                              [_vm._v("check_circle")]
+                            )
+                          : _c(
+                              "span",
+                              {
+                                staticClass:
+                                  "material-symbols-outlined m-0 pe-2 align-middle",
+                              },
+                              [_vm._v("radio_button_checked")]
+                            ),
+                        _vm._v(" Impression Direct\n\t\t                    "),
+                        _vm.order.status == 22
+                          ? _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "progress position-absolute progress_status",
+                              },
+                              [
+                                _c("div", {
+                                  staticClass:
+                                    "progress-bar progress-bar-striped bg-success progress-bar-animated",
+                                  staticStyle: { width: "100%" },
+                                  attrs: {
+                                    role: "progressbar",
+                                    "aria-valuenow": "100",
+                                    "aria-valuemin": "0",
+                                    "aria-valuemax": "100",
+                                  },
+                                }),
+                              ]
+                            )
+                          : _vm._e(),
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
                 _c(
                   "li",
                   {
                     staticClass:
                       "rounded px-3 py-2 me-3 border-3 position-relative",
                     class:
-                      _vm.order.status > 3 && _vm.order.status != 21
+                      _vm.order.status > 3 &&
+                      _vm.order.status != 21 &&
+                      _vm.order.status != 22
                         ? "text-center text-dark border-bottom border-success  bg-light-green"
                         : "bg-light text-secondary border-bottom fw-light",
                   },
                   [
-                    _vm.order.status > 3 && _vm.order.status != 21
+                    _vm.order.status > 3 &&
+                    _vm.order.status != 21 &&
+                    _vm.order.status != 22
                       ? _c(
                           "span",
                           {
@@ -80813,12 +81252,16 @@ var render = function () {
                     staticClass:
                       "rounded px-3 py-2 me-3 border-3 position-relative",
                     class:
-                      _vm.order.status > 4 && _vm.order.status != 21
+                      _vm.order.status > 4 &&
+                      _vm.order.status != 21 &&
+                      _vm.order.status != 22
                         ? "text-center text-dark border-bottom border-success  bg-light-green"
                         : "bg-light text-secondary border-bottom fw-light",
                   },
                   [
-                    _vm.order.status > 4 && _vm.order.status != 21
+                    _vm.order.status > 4 &&
+                    _vm.order.status != 21 &&
+                    _vm.order.status != 22
                       ? _c(
                           "span",
                           {
@@ -80869,12 +81312,16 @@ var render = function () {
                     staticClass:
                       "rounded px-3 py-2 me-3 border-3 position-relative",
                     class:
-                      _vm.order.status >= 5 && _vm.order.status != 21
+                      _vm.order.status >= 5 &&
+                      _vm.order.status != 21 &&
+                      _vm.order.status != 22
                         ? "text-center text-dark border-bottom border-success  bg-light-green"
                         : "bg-light text-secondary border-bottom fw-light",
                   },
                   [
-                    _vm.order.status >= 5 && _vm.order.status != 21
+                    _vm.order.status >= 5 &&
+                    _vm.order.status != 21 &&
+                    _vm.order.status != 22
                       ? _c(
                           "span",
                           {
@@ -81035,7 +81482,7 @@ var render = function () {
                     ]),
                     _vm._v(" "),
                     _c("td", { staticClass: "ps-2" }, [
-                      _vm._v(_vm._s(_vm.order.comment)),
+                      _vm._v(_vm._s(_vm.order.full_comment)),
                     ]),
                   ]),
                 ]),

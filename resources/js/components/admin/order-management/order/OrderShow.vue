@@ -20,7 +20,7 @@
 							  <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
 							</div>
 		                </li>
-		                <li v-if="isdecoupeOrder != 1" class="rounded px-3 py-2 me-3  border-3 position-relative" :class="order.status > 2 ? 'text-center text-dark border-bottom border-success  bg-light-green' : 'bg-light text-secondary border-bottom fw-light'">
+		                <li v-if="isdecoupeOrder != 1 && isimpressionOrder != 1" class="rounded px-3 py-2 me-3  border-3 position-relative" :class="order.status > 2 ? 'text-center text-dark border-bottom border-success  bg-light-green' : 'bg-light text-secondary border-bottom fw-light'">
 		                	<span class="material-symbols-outlined m-0 pe-2 align-middle text-success" v-if="order.status > 2">check_circle</span>
 		                    <span class="material-symbols-outlined m-0 pe-2 align-middle" v-else>radio_button_checked</span> En Salle de Tirage
 		                    <div class="progress position-absolute progress_status" v-if="order.status == 2">
@@ -28,31 +28,38 @@
 							</div>
 		                </li>
 
-		                 <li v-if="isdecoupeOrder == 1" class="rounded px-3 py-2 me-3  border-3 position-relative" :class="order.status > 2 && order.status != 21 ? 'text-center text-dark border-bottom border-success  bg-light-green' : 'bg-light text-secondary border-bottom fw-light'">
-		                	<span class="material-symbols-outlined m-0 pe-2 align-middle text-success" v-if="order.status > 2 && order.status != 21">check_circle</span>
+		                 <li v-if="isdecoupeOrder==1" class="rounded px-3 py-2 me-3  border-3 position-relative" :class="order.status > 2 && order.status != 22 && order.status != 21 ? 'text-center text-dark border-bottom border-success  bg-light-green' : 'bg-light text-secondary border-bottom fw-light'">
+		                	<span class="material-symbols-outlined m-0 pe-2 align-middle text-success" v-if="order.status > 2 && order.status != 21 && order.status != 22">check_circle</span>
 		                    <span class="material-symbols-outlined m-0 pe-2 align-middle" v-else>radio_button_checked</span> En Salle de Découpe
 		                    <div class="progress position-absolute progress_status" v-if="order.status == 21">
 							  <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
 							</div>
 		                </li>
-		                <li class="rounded px-3 py-2 me-3 border-3 position-relative"  :class="order.status > 3 && order.status != 21 ? 'text-center text-dark border-bottom border-success  bg-light-green' : 'bg-light text-secondary border-bottom fw-light'">
-		                    <span class="material-symbols-outlined m-0 pe-2 align-middle text-success" v-if="order.status > 3 && order.status != 21">check_circle</span>
+		                 <li v-if="isimpressionOrder==1" class="rounded px-3 py-2 me-3  border-3 position-relative" :class="order.status > 2 && order.status != 21 && order.status != 22 ? 'text-center text-dark border-bottom border-success  bg-light-green' : 'bg-light text-secondary border-bottom fw-light'">
+		                	<span class="material-symbols-outlined m-0 pe-2 align-middle text-success" v-if="order.status > 2 && order.status != 21 && order.status != 22">check_circle</span>
+		                    <span class="material-symbols-outlined m-0 pe-2 align-middle" v-else>radio_button_checked</span> Impression Direct
+		                    <div class="progress position-absolute progress_status" v-if="order.status == 22">
+							  <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+							</div>
+		                </li>
+		                <li class="rounded px-3 py-2 me-3 border-3 position-relative"  :class="order.status > 3 && order.status != 21 && order.status != 22 ? 'text-center text-dark border-bottom border-success  bg-light-green' : 'bg-light text-secondary border-bottom fw-light'">
+		                    <span class="material-symbols-outlined m-0 pe-2 align-middle text-success" v-if="order.status > 3 && order.status != 21 && order.status != 22 ">check_circle</span>
 		                    <span class="material-symbols-outlined m-0 pe-2 align-middle" v-else>radio_button_checked</span>
 		                   En Finition
 		                    <div class="progress position-absolute progress_status" v-if="order.status == 3">
 							  <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
 							</div>
 		                </li>
-		                <li class="rounded px-3 py-2 me-3 border-3 position-relative"  :class="order.status > 4 && order.status != 21? 'text-center text-dark border-bottom border-success  bg-light-green' : 'bg-light text-secondary border-bottom fw-light'">
-		                  <span class="material-symbols-outlined m-0 pe-2 align-middle text-success" v-if="order.status > 4 && order.status != 21">check_circle</span>
+		                <li class="rounded px-3 py-2 me-3 border-3 position-relative"  :class="order.status > 4 && order.status != 21 && order.status != 22? 'text-center text-dark border-bottom border-success  bg-light-green' : 'bg-light text-secondary border-bottom fw-light'">
+		                  <span class="material-symbols-outlined m-0 pe-2 align-middle text-success" v-if="order.status > 4 && order.status != 21 && order.status != 22">check_circle</span>
 		                    <span class="material-symbols-outlined m-0 pe-2 align-middle" v-else>radio_button_checked</span>
 		                   Prête pour livraison
 		                    <div class="progress position-absolute progress_status" v-if="order.status == 4">
 							  <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
 							</div>
 		                </li>
-		                <li class="rounded px-3 py-2 me-3 border-3 position-relative" :class="order.status >= 5 && order.status != 21? 'text-center text-dark border-bottom border-success  bg-light-green' : 'bg-light text-secondary border-bottom fw-light'">
-		                   <span class="material-symbols-outlined m-0 pe-2 align-middle text-success" v-if="order.status >= 5 && order.status != 21">check_circle</span>
+		                <li class="rounded px-3 py-2 me-3 border-3 position-relative" :class="order.status >= 5 && order.status != 21 && order.status != 22? 'text-center text-dark border-bottom border-success  bg-light-green' : 'bg-light text-secondary border-bottom fw-light'">
+		                   <span class="material-symbols-outlined m-0 pe-2 align-middle text-success" v-if="order.status >= 5 && order.status != 21 && order.status != 22">check_circle</span>
 		                    <span class="material-symbols-outlined m-0 pe-2 align-middle" v-else>radio_button_checked</span>
 		                   Livré
 		                    <!--div class="progress position-absolute progress_status" v-if="order.status == 5">
@@ -145,7 +152,7 @@
         				</tr>
         				<tr>
         					<th class="py-1">commentaire: </th>
-        					<td class="ps-2">{{ order.comment }}</td>
+        					<td class="ps-2">{{ order.full_comment }}</td>
         				</tr></tbody>
         			</table>
         			
@@ -167,6 +174,7 @@ export default {
         orderLogs: {type: Array, required: true}, 
         statusLog:  {type: Object, required: true},
         isdecoupeOrder:  {type: Number, required: true},
+        isimpressionOrder:  {type: Number, required: true},
     },
     data() {
         return {

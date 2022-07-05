@@ -9,12 +9,12 @@
                     <div class="d-flex align-items-start">
                         <div class="flex-grow-1">
                             <h3 class="mb-2">{{ $countNewOrder }}</h3>
-                            <p class="mb-2 fw-normal fs-6">En cours de validation</p>
+                            <p class="mb-2 fw-normal mt-3 fs-6">En cours de validation</p>
                             <div class="mb-0">
                                 <a href="#" class="text-warning d-none">Afficher</a>
                             </div>
                         </div>
-                        <div class="d-inline-block ms-3">
+                        <div class="d-inline-block ms-3 statePosition position-absolute">
                             <div class="stat d-flex align-items-center justify-content-center">
                                <span class="text-warning material-symbols-outlined">timer</span>
                             </div>
@@ -29,12 +29,12 @@
                     <div class="d-flex align-items-start">
                         <div class="flex-grow-1">
                             <h3 class="mb-2">{{ $countPrint }}</h3>
-                            <p class="mb-2 fw-normal fs-6">En salle de Tirage</p>
+                            <p class="mb-2 fw-normal mt-3 fs-6">En salle de Tirage</p>
                             <div class="mb-0">
                                 <a href="#" class="text-warning d-none">Afficher</a>
                             </div>
                         </div>
-                        <div class="d-inline-block ms-3">
+                        <div class="d-inline-block ms-3 statePosition position-absolute">
                             <div class="stat d-flex align-items-center justify-content-center">
                                <span class="text-warning material-symbols-outlined">print</span>
                             </div>
@@ -48,13 +48,34 @@
                 <div class="card-body py-4">
                     <div class="d-flex align-items-start">
                         <div class="flex-grow-1">
-                            <h3 class="mb-2">{{ $countDecoupe }}</h3>
-                            <p class="mb-2 fw-normal fs-6">En salle de Découpe</p>
+                            <h3 class="mb-2">{{ $countImpressionDirecte }}</h3>
+                            <p class="mb-2 fw-normal mt-3 fs-6">Impression Directe</p>
                             <div class="mb-0">
                                 <a href="#" class="text-warning d-none">Afficher</a>
                             </div>
                         </div>
-                        <div class="d-inline-block ms-3">
+                        <div class="d-inline-block ms-3 statePosition position-absolute">
+                            <div class="stat d-flex align-items-center justify-content-center">
+                               <span class="text-warning material-symbols-outlined">format_color_fill</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-12 col-sm-6 col-xxl d-flex mb-3">
+            <div class="card flex-fill">
+                <div class="card-body py-4">
+                    <div class="d-flex align-items-start">
+                        <div class="flex-grow-1">
+                            <h3 class="mb-2">{{ $countDecoupe }}</h3>
+                            <p class="mb-2 fw-normal mt-3 fs-6">En salle de Découpe</p>
+                            <div class="mb-0">
+                                <a href="#" class="text-warning d-none">Afficher</a>
+                            </div>
+                        </div>
+                        <div class="d-inline-block ms-3 statePosition position-absolute">
                             <div class="stat d-flex align-items-center justify-content-center">
                                <span class="text-warning material-symbols-outlined">cut</span>
                             </div>
@@ -69,12 +90,12 @@
                     <div class="d-flex align-items-start">
                         <div class="flex-grow-1">
                             <h3 class="mb-2">{{ $countFinition }}</h3>
-                            <p class="mb-2 fw-normal fs-6">En finition</p>
+                            <p class="mb-2 fw-normal mt-3 fs-6">En finition</p>
                             <div class="mb-0">
                                <a href="#" class="text-warning d-none">Afficher</a>
                             </div>
                         </div>
-                        <div class="d-inline-block ms-3">
+                        <div class="d-inline-block ms-3 statePosition position-absolute">
                             <div class="stat d-flex align-items-center justify-content-center">
                                <span class="text-warning material-symbols-outlined">palette</span>
                             </div>
@@ -94,7 +115,7 @@
                                <a href="#" class="text-warning d-none">Afficher</a>
                             </div>
                         </div>
-                        <div class="d-inline-block ms-3">
+                        <div class="d-inline-block ms-3 statePosition position-absolute">
                             <div class="stat d-flex align-items-center justify-content-center">
                                 <span class="text-warning material-symbols-outlined">local_shipping</span>
                             </div>
