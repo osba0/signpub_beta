@@ -18,6 +18,7 @@ class TypeResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'traitement' => $this->traitement,
             'status' => $this->status,
             'isOther'  => $this->isOther,
             'created_at' => Carbon::parse($this->created_at)->format('d/m/Y H:i'),

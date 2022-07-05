@@ -55,6 +55,18 @@
                         :meta="column.meta"
                     >
                     </data-table-cell>
+                     <slot v-if="column.label === 'Traitement'">
+
+                        <div v-for="(status, index) in traitementMatiere" v-bind:value="index">
+
+                             <template v-if="item.traitement==index">
+                                <span class="rounded-pill badge bg-primary"> {{ status }}</span>
+                            </template>
+                            
+                        </div>
+                       
+                       
+                    </slot> 
                     <slot v-if="column.label === 'Autre'">
                       <input type="radio" name="isOther" @change="setOhter(item.id)"  :checked="item.isOther === 1">
                       
@@ -64,6 +76,9 @@
                     </slot>
                      <slot v-if="column.label === 'Action'">
                     <div class="justify-content-start align-items-center d-flex">
+                         <a class="btn btn-default bg-none text-primary" data-bs-toggle="modal" data-bs-target="#newMatiereModal" @click="setUpdate(item)">
+                             <span class="material-symbols-outlined">border_color</span>
+                         </a>
                          <button class="btn text-danger" title="Supprimer" @click="deleteMatiere(item)"><span class="material-symbols-outlined">delete</span></button>
                             
                       
@@ -105,9 +120,28 @@
                         >
                     </div>
                 </div>
+                <div class="mt-3">
+                    <label for="roles" class="mb-0 font-weight-semi-bold">Traitement</label>
+                   
+                    <div class="d-flex bg-white align-items-center py-1 border rounded-lg border-2 div-focus flex-1">
+                        <select
+                            id="roles"
+                            v-model="roleDestination"
+                            name="roles"
+                            class="form-select px-2 w-100 border-0 shadow-none"
+                         
+                        >
+                            <option v-for="(role, index) in traitementMatiere" v-bind:value="index">
+                                {{ role }}
+                            </option>
+                        </select>
+                    </div>
+                    
+                </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-success" @click="saveMatiere()">Enregistrer</button>
+                <button type="button" class="btn btn-success" @click="saveMatiere()" v-if="!ismodify">Enregistrer</button>
+                <button type="button" class="btn btn-success" @click="updateMatiere()" v-if="ismodify">Modifier</button>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
               </div>
             </div>
@@ -122,11 +156,12 @@ export default {
     
     props: {
         url: {type: String, required: true},
+        traitementMatiere: {type: Object, required: true},
         urlBack: {type: String, required: true},
     },
     data() {
         return {
-            perPage: ["10", "20", "50"],
+            perPage: ["20", "40", "100"],
             orderBy: "created_at",
             orderDir: "desc",
             columns: [
@@ -138,6 +173,10 @@ export default {
                 {
                     label: 'Matiéres',
                     name: 'name',
+                    orderable: true,
+                },
+                {
+                    label: 'Traitement',
                     orderable: true,
                 },
                 {
@@ -169,7 +208,10 @@ export default {
                 placeholderSearch: 'Rechercher'
             },
             tableData: {},
-            name
+            roleDestination: '',
+            name,
+            ismodify: false,
+            currentID: null
         };
     },
     methods: {
@@ -183,8 +225,41 @@ export default {
         paginationChangePage(page) {
             return this.$refs.orderTable.paginationChangePage(page);
         },
+        setUpdate(matiere){
+            this.ismodify = true;
+            this.currentID = matiere.id;
+            this.name = matiere.name;
+            this.roleDestination = matiere.traitement;
+        },
+        updateMatiere(){
+            axios.post('config/update-matiere', {"id": this.currentID, "name": this.name, "traitement": this.roleDestination})
+            .then(response => {
+                if(response.data.code==0){
+                    Swal.fire({
+                      title: 'Succés',
+                      text: "Matiére modifié avec succés.",
+                      icon: 'success'
+                    }).then((result) => {
+                        window.location.href = this.urlBack;
+                    });
+
+                }else{
+                    Swal.fire(
+                      'Error!',
+                       response.data.message,
+                      'error'
+                    ); 
+                }
+
+
+                  
+            })
+            .catch(error => {
+                
+            });
+        },
         saveMatiere(){
-            axios.post('config/store-matiere', {"name": this.name})
+            axios.post('config/store-matiere', {"name": this.name, "traitement": this.roleDestination})
             .then(response => {
                 if(response.data.code==0){
                     Swal.fire({

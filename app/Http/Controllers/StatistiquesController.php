@@ -34,7 +34,7 @@ class StatistiquesController extends Controller
 
         $tireurs = []; $tireursID = [];
         foreach($users as $user){
-            if($user->hasRole(UserRole::ROLE_SALLE_TIRAGE_ROULEAU) || $user->hasRole(UserRole::ROLE_SALLE_TIRAGE_FEUILLE) || $user->hasRole(UserRole::ROLE_SALLE_DECOUPE)){
+            if($user->hasRole(UserRole::ROLE_SALLE_TIRAGE_ROULEAU) || $user->hasRole(UserRole::ROLE_SALLE_TIRAGE_FEUILLE)){
                   $tireurs[] = [
                             "id" => $user->id,
                             "name" => $user->name

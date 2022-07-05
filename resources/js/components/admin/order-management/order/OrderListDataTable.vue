@@ -62,11 +62,11 @@
                     </slot>
                      <slot v-if="column.label === 'Status'">
 
-                        <div v-for="(status, index) in orderStatus" v-bind:value="index">
+                        <div v-for="(status, value, index) in orderStatus" v-bind:value="value">
 
-                             <template v-if="item.status==index">
+                             <template v-if="item.status==value">
                             
-                                <span class="rounded-pill badge " :class="'bg-'+etatColor[index-1]"> {{ status  }}</span>
+                                <span class="rounded-pill badge " :class="'bg-'+etatColor[index]"> {{ status  }}</span>
                             </template>
                             
                         </div>
@@ -242,7 +242,7 @@ export default {
                 phone: '',
                 date: ''
             },
-            etatColor: ['secondary fw-normal', 'info text-dark fw-normal', 'warning fw-normal', 'danger fw-normal', 'success fw-normal'],
+            etatColor: ['secondary fw-normal', 'info text-dark fw-normal', 'warning fw-normal', 'danger fw-normal', 'success fw-normal', 'primary fw-normal'],
             isloading: false
         };
     },
@@ -270,7 +270,7 @@ export default {
               confirmButtonText: 'Oui',
               cancelButtonText: 'Non'
             }).then((result) => {
-              if (result.isConfirmed) {
+              if (result.isConfirmed) { 
                 axios.put(`change-status/${id}/${this.valueStatus}/${user_id}`)
                 .then(res => {
                     Swal.fire({

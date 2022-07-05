@@ -20,6 +20,7 @@ class Type extends Model
     protected $fillable = [
         'id',
         'name',
+        'traitement',
         'status',
         'isOther',
         'created_at'
@@ -32,6 +33,10 @@ class Type extends Model
             'orderable' => true,
         ],
         'name' => [
+            'searchable' => true,
+            'orderable' => true,
+        ],
+        'traitement' => [
             'searchable' => true,
             'orderable' => true,
         ],

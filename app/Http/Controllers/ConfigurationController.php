@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 use App\Models\Type;
 use App\Http\Resources\TypeCollection;
+use App\Models\StatusOrder;
 
 class ConfigurationController extends Controller
 {
@@ -27,7 +28,8 @@ class ConfigurationController extends Controller
      */
     public function index()
     {
-        return view('admin.config.index');
+         $traitementMatieres = StatusOrder::getStatusMatiere();
+        return view('admin.config.index', compact('traitementMatieres'));
     }
 
         /**
@@ -72,9 +74,9 @@ class ConfigurationController extends Controller
     }
 
     public function store(Request $request){
-
        $matiere = Type::create([
          'name' => request('name'),
+         'traitement' => request('traitement'),
          'status' => 1,
          'isOther' => 0
        ]);
@@ -91,6 +93,31 @@ class ConfigurationController extends Controller
        }
       
        
+    }
+
+
+     public function updateMatiere(Request $request){
+       
+        $resp = Type::where('id', request('id'))->update([
+             'name' => request('name'),
+             'traitement' => request('traitement'),
+        ]);
+
+        if($resp){
+
+            return response([
+                "code" => 0,
+                "message" => "OK"
+            ]);
+
+       }else{
+
+            return response([
+                "code" => 1,
+                "message" => "Erreur!"
+            ]);
+       }
+    
     }
 
      public function updateStatusMatiere(Request $request){

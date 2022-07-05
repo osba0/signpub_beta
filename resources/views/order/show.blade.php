@@ -19,7 +19,8 @@
                 <order-show-client :order-data='@json($data)'
                 :order-status='@json($status ?? "")'  
                 :order-logs= '@json($orderLogs)'
-                :status-log = '@json($statusLog)' 
+                :status-log = '@json($statusLog)'
+                :isdecoupe-order = {{$isdecoupe}} 
                 >
                 </order-show-client>
             </div>

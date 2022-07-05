@@ -2,14 +2,14 @@
 
 @section('content')
 <div class="container">
-    <div class="row mb-4 dasboard-client">
-        <div class="col-12 col-sm-6 col-xxl-3 d-flex">
+    <div class="row mb-3 dasboard-client">
+        <div class="col-12 col-sm-6 col-xxl d-flex mb-3">
             <div class="card flex-fill">
                 <div class="card-body py-4">
                     <div class="d-flex align-items-start">
                         <div class="flex-grow-1">
                             <h3 class="mb-2">{{ $countNewOrder }}</h3>
-                            <p class="mb-2 fw-light fs-4">En cours de validation</p>
+                            <p class="mb-2 fw-normal fs-6">En cours de validation</p>
                             <div class="mb-0">
                                 <a href="#" class="text-warning d-none">Afficher</a>
                             </div>
@@ -23,13 +23,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-xxl-3 d-flex">
+        <div class="col-12 col-sm-6 col-xxl d-flex mb-3">
             <div class="card flex-fill">
                 <div class="card-body py-4">
                     <div class="d-flex align-items-start">
                         <div class="flex-grow-1">
                             <h3 class="mb-2">{{ $countPrint }}</h3>
-                            <p class="mb-2 fw-light fs-4">En salle de Tirage</p>
+                            <p class="mb-2 fw-normal fs-6">En salle de Tirage</p>
                             <div class="mb-0">
                                 <a href="#" class="text-warning d-none">Afficher</a>
                             </div>
@@ -43,13 +43,33 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-xxl-3 d-flex">
+        <div class="col-12 col-sm-6 col-xxl d-flex mb-3">
+            <div class="card flex-fill">
+                <div class="card-body py-4">
+                    <div class="d-flex align-items-start">
+                        <div class="flex-grow-1">
+                            <h3 class="mb-2">{{ $countDecoupe }}</h3>
+                            <p class="mb-2 fw-normal fs-6">En salle de Découpe</p>
+                            <div class="mb-0">
+                                <a href="#" class="text-warning d-none">Afficher</a>
+                            </div>
+                        </div>
+                        <div class="d-inline-block ms-3">
+                            <div class="stat d-flex align-items-center justify-content-center">
+                               <span class="text-warning material-symbols-outlined">cut</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xxl d-flex mb-3">
             <div class="card flex-fill">
                 <div class="card-body py-4">
                     <div class="d-flex align-items-start">
                         <div class="flex-grow-1">
                             <h3 class="mb-2">{{ $countFinition }}</h3>
-                            <p class="mb-2 fw-light fs-4">En finition</p>
+                            <p class="mb-2 fw-normal fs-6">En finition</p>
                             <div class="mb-0">
                                <a href="#" class="text-warning d-none">Afficher</a>
                             </div>
@@ -63,13 +83,13 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-sm-6 col-xxl-3 d-flex">
+        <div class="col-12 col-sm-6 col-xxl d-flex mb-3">
             <div class="card flex-fill">
                 <div class="card-body py-4">
                     <div class="d-flex align-items-start">
                         <div class="flex-grow-1">
                             <h3 class="mb-2">{{ $countDone }}</h3>
-                            <p class="mb-2 fw-light fs-4">Prête pour livraison</p>
+                            <p class="mb-2 fw-normal fs-6">Prête pour livraison</p>
                             <div class="mb-0">
                                <a href="#" class="text-warning d-none">Afficher</a>
                             </div>

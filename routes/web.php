@@ -58,6 +58,7 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
 
         Route::post('admin/config/update-other', [ConfigurationController::class, 'updateOther']);
         Route::post('admin/config/store-matiere', [ConfigurationController::class, 'store']);
+        Route::post('admin/config/update-matiere', [ConfigurationController::class, 'updateMatiere']);
         Route::post('admin/config/status-matiere', [ConfigurationController::class, 'updateStatusMatiere']); 
         Route::delete('admin/config/delete-matiere/{id}', [ConfigurationController::class, 'deleteMatiere']); 
 

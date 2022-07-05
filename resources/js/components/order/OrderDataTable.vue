@@ -60,11 +60,9 @@
                     </slot>
                      <slot v-if="column.label === 'Etat'">
 
-                        <div v-for="(status, index) in orderStatus" v-bind:value="index">
-
-                             <template v-if="item.status==index">
-                            
-                                <span class="rounded-pill badge " :class="'bg-'+etatColor[index-1]"> {{ status  }}</span>
+                        <div v-for="(status, value, index) in orderStatus" v-bind:value="index">
+                            <template v-if="item.status==value">
+                                <span class="rounded-pill badge " :class="'bg-'+etatColor[index]"> {{ status  }}</span>
                             </template>
                             
                         </div>
@@ -168,7 +166,7 @@ export default {
                 }
             },
             tableData: {}, 
-            etatColor: ['secondary fw-normal', 'info text-dark fw-normal', 'warning fw-normal', 'danger fw-normal', 'success fw-normal']
+            etatColor: ['secondary fw-normal', 'info text-dark fw-normal', 'warning fw-normal', 'danger fw-normal', 'success fw-normal', 'primary fw-normal']
         };
     },
     methods: {

@@ -11,6 +11,16 @@
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
+                        @if($errors->any())
+                         <div class="row mb-3">
+                           
+                            <div class="fs-6 text-danger text-center d-flex align-items-center justify-content-center">
+                                <span class="material-symbols-outlined mr-2">warning</span>
+                                <span>{{$errors->first()}}</span>
+                            </div>
+                        </div>
+                        @endif
+                        
                         <div class="row mb-3">
                             <label for="username" class="col-md-4 col-form-label text-md-end">{{ __('Email ou Identifiant') }}</label>
 

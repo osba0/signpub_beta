@@ -3,8 +3,8 @@
 @section('content')
 <div class="container">
     @if(auth()->user()->hasRole(\App\Models\UserRole::ROLE_ADMIN))
-        
-        <matiere-data-table url="{{ route('matiere.list') }}" url-back="{{ route('config.index') }}"></matiere-data-table>
+       
+        <matiere-data-table url="{{ route('matiere.list') }}" url-back="{{ route('config.index') }}" :traitement-matiere='@json($traitementMatieres)'></matiere-data-table>
       
     @else
     <div class="row">

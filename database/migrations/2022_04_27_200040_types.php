@@ -18,6 +18,7 @@ class Types extends Migration
             $table->id();
             $table->string('name');
             $table->boolean('status');
+            $table->integer('traitement')->default(2);
         });
     }
 

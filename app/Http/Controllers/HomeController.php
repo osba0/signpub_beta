@@ -38,10 +38,11 @@ class HomeController extends Controller
         // Get statistique
         $countNewOrder   = Order::get()->where("user_id", $user->id)->where("status", StatusOrder::INITIE)->count();
         $countPrint      = Order::get()->where("user_id", $user->id)->where("status", StatusOrder::EN_SALLE_DE_TIRAGE)->count();
+        $countDecoupe      = Order::get()->where("user_id", $user->id)->where("status", StatusOrder::EN_SALLE_DE_DECOUPE)->count();
         $countFinition   = Order::get()->where("user_id", $user->id)->where("status", StatusOrder::EN_FINITION)->count();
         $countDone       = Order::get()->where("user_id", $user->id)->where("status", StatusOrder::ATTENTE_POUR_LIVRAISON)->count();
 
-        return view('home', compact('status', 'countNewOrder', 'countPrint', 'countFinition', 'countDone'));
+        return view('home', compact('status', 'countNewOrder', 'countPrint','countDecoupe', 'countFinition', 'countDone'));
         
     }
 
@@ -76,12 +77,16 @@ class HomeController extends Controller
         }
 
         if($user->hasRole(UserRole::ROLE_SECRETARIAT)){
-            $validationStatus = StatusOrder::EN_SALLE_DE_TIRAGE;
+            $validationStatus = strval(StatusOrder::EN_SALLE_DE_TIRAGE).'-'.strval(StatusOrder::EN_SALLE_DE_DECOUPE);
             $actualStatus = StatusOrder::INITIE;
         }
-        if($user->hasRole(UserRole::ROLE_SALLE_TIRAGE_ROULEAU) || $user->hasRole(UserRole::ROLE_SALLE_TIRAGE_FEUILLE) || $user->hasRole(UserRole::ROLE_SALLE_DECOUPE)){
+        if($user->hasRole(UserRole::ROLE_SALLE_TIRAGE_ROULEAU) || $user->hasRole(UserRole::ROLE_SALLE_TIRAGE_FEUILLE)){
             $validationStatus = StatusOrder::EN_FINITION;
             $actualStatus = StatusOrder::EN_SALLE_DE_TIRAGE;
+        }
+         if($user->hasRole(UserRole::ROLE_SALLE_DECOUPE)){
+            $validationStatus = StatusOrder::EN_FINITION;
+            $actualStatus = StatusOrder::EN_SALLE_DE_DECOUPE;
         }
          if($user->hasRole(UserRole::ROLE_FINITION)){
             $validationStatus = StatusOrder::ATTENTE_POUR_LIVRAISON;
@@ -92,12 +97,13 @@ class HomeController extends Controller
         // Get statistique
         $countNewOrder   = Order::get()->where("status", StatusOrder::INITIE)->count();
         $countPrint      = Order::get()->where("status", StatusOrder::EN_SALLE_DE_TIRAGE)->count();
+        $countDecoupe      = Order::get()->where("status", StatusOrder::EN_SALLE_DE_DECOUPE)->count();;
         $countFinition   = Order::get()->where("status", StatusOrder::EN_FINITION)->count();
         $countDone       = Order::get()->where("status", StatusOrder::ATTENTE_POUR_LIVRAISON)->count();
 
         $totalOrder   = Order::get()->where("status", '>=', StatusOrder::INITIE)->count();
         $totalClient   = Client::get()->count();
         
-        return view('admin.adminHome', compact('status', 'validationStatus', 'actualStatus', 'countNewOrder', 'countPrint', 'countFinition', 'countDone', 'canEdit', 'totalOrder', 'totalClient', 'isAdmin', 'canFiltreStatus'));
+        return view('admin.adminHome', compact('status', 'validationStatus', 'actualStatus', 'countNewOrder', 'countPrint','countDecoupe',  'countFinition', 'countDone', 'canEdit', 'totalOrder', 'totalClient', 'isAdmin', 'canFiltreStatus'));
     }
 }

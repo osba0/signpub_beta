@@ -20,6 +20,7 @@
                 :order-status='@json($status ?? "")'  
                 :order-logs= '@json($orderLogs)'
                 :status-log = '@json($statusLog)'
+                :isdecoupe-order = {{$isdecoupe}} 
                 >
                 </order-show>
             </div>

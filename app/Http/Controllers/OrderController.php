@@ -143,8 +143,11 @@ class OrderController extends Controller
         $query = Order::eloquentQuery($sortBy, $orderBy, $searchValue);
 
         
-        if($user->hasRole(UserRole::ROLE_SALLE_TIRAGE_ROULEAU) || $user->hasRole(UserRole::ROLE_SALLE_TIRAGE_FEUILLE) || $user->hasRole(UserRole::ROLE_SALLE_DECOUPE)){
+        if($user->hasRole(UserRole::ROLE_SALLE_TIRAGE_ROULEAU) || $user->hasRole(UserRole::ROLE_SALLE_TIRAGE_FEUILLE)){
            $query = $query->where("status", StatusOrder::EN_SALLE_DE_TIRAGE);
+        }
+         if($user->hasRole(UserRole::ROLE_SALLE_DECOUPE)){
+           $query = $query->where("status", StatusOrder::EN_SALLE_DE_DECOUPE);
         }
         if($user->hasRole(UserRole::ROLE_FINITION)){
            $query = $query->where("status", StatusOrder::EN_FINITION);
@@ -167,6 +170,13 @@ class OrderController extends Controller
      */
     public function orderShow(Order $order): View
     {
+        $orderCurrent = Order::leftJoin('types', 'orders.type_id', '=', 'types.id')
+        ->select('orders.*', 'types.traitement as traitement', 'types.status as statusType')->where('orders.id', $order['id'])->first()->toArray() ;
+        $isdecoupe=0; 
+
+        if($orderCurrent['traitement'] == StatusOrder::EN_SALLE_DE_DECOUPE){
+            $isdecoupe=true; 
+        }
 
         $data = new OrderResource($order);
 
@@ -186,7 +196,7 @@ class OrderController extends Controller
                           ];
         }
 
-        return view('admin.order.show', compact('data', 'status', 'statusLog', 'orderLogs'));
+        return view('admin.order.show', compact('data', 'status', 'statusLog', 'orderLogs', 'isdecoupe'));
     }
 
 
@@ -203,6 +213,16 @@ class OrderController extends Controller
         if($order->user_id != $user->id){
             abort(404);
         }
+        
+        $orderCurrent = Order::leftJoin('types', 'orders.type_id', '=', 'types.id')
+        ->select('orders.*', 'types.traitement as traitement', 'types.status as statusType')->where('orders.id', $order['id'])->first()->toArray() ;
+        $isdecoupe=0; 
+
+        if($orderCurrent['traitement'] == StatusOrder::EN_SALLE_DE_DECOUPE){
+            $isdecoupe=true; 
+        }
+
+
 
         $data = new OrderResource($order);
 
@@ -222,7 +242,7 @@ class OrderController extends Controller
                           ];
         }
 
-        return view('order.show', compact('data', 'status', 'statusLog', 'orderLogs'));
+        return view('order.show', compact('data', 'status', 'statusLog', 'orderLogs', 'isdecoupe'));
     }
 
 
@@ -264,13 +284,27 @@ class OrderController extends Controller
             }
         }
 
-        $order = Order::where('id', $id);
+
+
+        $order = Order::leftJoin('types', 'orders.type_id', '=', 'types.id')
+        ->select('orders.*', 'types.traitement as traitement', 'types.status as statusType')->where('orders.id', $id) ;
 
         $oldStatus = $order->first()->toArray();
 
+       
+
+        if($oldStatus['status'] == StatusOrder::INITIE){
+           if($oldStatus['traitement'] == StatusOrder::EN_SALLE_DE_TIRAGE){
+                $status = StatusOrder::EN_SALLE_DE_TIRAGE; 
+           }
+           if($oldStatus['traitement'] == StatusOrder::EN_SALLE_DE_DECOUPE){
+                $status = StatusOrder::EN_SALLE_DE_DECOUPE; 
+           }
+        }
+
         $order->update([
-                "status" => $status
-               ]);
+            "orders.status" => $status
+           ]);
 
         // Historisation du changement de status
         LogOrder::create([

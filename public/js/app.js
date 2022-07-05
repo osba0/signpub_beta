@@ -5780,6 +5780,40 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -5789,6 +5823,10 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
       type: String,
       required: true
     },
+    traitementMatiere: {
+      type: Object,
+      required: true
+    },
     urlBack: {
       type: String,
       required: true
@@ -5796,7 +5834,7 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
   },
   data: function data() {
     return {
-      perPage: ["10", "20", "50"],
+      perPage: ["20", "40", "100"],
       orderBy: "created_at",
       orderDir: "desc",
       columns: [{
@@ -5806,6 +5844,9 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
       }, {
         label: 'Matiéres',
         name: 'name',
+        orderable: true
+      }, {
+        label: 'Traitement',
         orderable: true
       }, {
         label: 'Etat',
@@ -5831,7 +5872,10 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
         placeholderSearch: 'Rechercher'
       },
       tableData: {},
-      name: name
+      roleDestination: '',
+      name: name,
+      ismodify: false,
+      currentID: null
     };
   },
   methods: {
@@ -5845,11 +5889,39 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
     paginationChangePage: function paginationChangePage(page) {
       return this.$refs.orderTable.paginationChangePage(page);
     },
-    saveMatiere: function saveMatiere() {
+    setUpdate: function setUpdate(matiere) {
+      this.ismodify = true;
+      this.currentID = matiere.id;
+      this.name = matiere.name;
+      this.roleDestination = matiere.traitement;
+    },
+    updateMatiere: function updateMatiere() {
       var _this = this;
 
+      axios.post('config/update-matiere', {
+        "id": this.currentID,
+        "name": this.name,
+        "traitement": this.roleDestination
+      }).then(function (response) {
+        if (response.data.code == 0) {
+          Swal.fire({
+            title: 'Succés',
+            text: "Matiére modifié avec succés.",
+            icon: 'success'
+          }).then(function (result) {
+            window.location.href = _this.urlBack;
+          });
+        } else {
+          Swal.fire('Error!', response.data.message, 'error');
+        }
+      })["catch"](function (error) {});
+    },
+    saveMatiere: function saveMatiere() {
+      var _this2 = this;
+
       axios.post('config/store-matiere', {
-        "name": this.name
+        "name": this.name,
+        "traitement": this.roleDestination
       }).then(function (response) {
         if (response.data.code == 0) {
           Swal.fire({
@@ -5857,7 +5929,7 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
             text: "Matiére ajouté avec succés.",
             icon: 'success'
           }).then(function (result) {
-            window.location.href = _this.urlBack;
+            window.location.href = _this2.urlBack;
           });
         } else {
           Swal.fire('Error!', response.data.message, 'error');
@@ -5876,7 +5948,7 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
       }).then(function (response) {})["catch"](function (error) {});
     },
     deleteMatiere: function deleteMatiere(matiere) {
-      var _this2 = this;
+      var _this3 = this;
 
       Swal.fire({
         title: "Etes-vous sûr de vouloir supprimé <u>" + matiere.name + "</u>?",
@@ -5895,7 +5967,7 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
                 text: matiere.name + ' a été supprimé.',
                 icon: 'success'
               }).then(function (result) {
-                window.location.href = _this2.urlBack;
+                window.location.href = _this3.urlBack;
               });
             } else {
               Swal.fire('Error!', '', 'error');
@@ -6392,7 +6464,7 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
         phone: '',
         date: ''
       },
-      etatColor: ['secondary fw-normal', 'info text-dark fw-normal', 'warning fw-normal', 'danger fw-normal', 'success fw-normal'],
+      etatColor: ['secondary fw-normal', 'info text-dark fw-normal', 'warning fw-normal', 'danger fw-normal', 'success fw-normal', 'primary fw-normal'],
       isloading: false
     };
   },
@@ -6660,6 +6732,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {},
   name: "OrderShow",
@@ -6681,6 +6761,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     statusLog: {
       type: Object,
+      required: true
+    },
+    isdecoupeOrder: {
+      type: Number,
       required: true
     }
   },
@@ -7640,8 +7724,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -7716,7 +7798,7 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
         }
       },
       tableData: {},
-      etatColor: ['secondary fw-normal', 'info text-dark fw-normal', 'warning fw-normal', 'danger fw-normal', 'success fw-normal']
+      etatColor: ['secondary fw-normal', 'info text-dark fw-normal', 'warning fw-normal', 'danger fw-normal', 'success fw-normal', 'primary fw-normal']
     };
   },
   methods: {
@@ -8118,6 +8200,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   components: {},
   name: "OrderShow",
@@ -8139,6 +8229,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     statusLog: {
       type: Object,
+      required: true
+    },
+    isdecoupeOrder: {
+      type: Number,
       required: true
     }
   },
@@ -76346,6 +76440,39 @@ var render = function () {
                                   },
                                 }),
                                 _vm._v(" "),
+                                column.label === "Traitement"
+                                  ? _vm._t("default", function () {
+                                      return _vm._l(
+                                        _vm.traitementMatiere,
+                                        function (status, index) {
+                                          return _c(
+                                            "div",
+                                            { attrs: { value: index } },
+                                            [
+                                              item.traitement == index
+                                                ? [
+                                                    _c(
+                                                      "span",
+                                                      {
+                                                        staticClass:
+                                                          "rounded-pill badge bg-primary",
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          " " + _vm._s(status)
+                                                        ),
+                                                      ]
+                                                    ),
+                                                  ]
+                                                : _vm._e(),
+                                            ],
+                                            2
+                                          )
+                                        }
+                                      )
+                                    })
+                                  : _vm._e(),
+                                _vm._v(" "),
                                 column.label === "Autre"
                                   ? _vm._t("default", function () {
                                       return [
@@ -76404,6 +76531,34 @@ var render = function () {
                                               "justify-content-start align-items-center d-flex",
                                           },
                                           [
+                                            _c(
+                                              "a",
+                                              {
+                                                staticClass:
+                                                  "btn btn-default bg-none text-primary",
+                                                attrs: {
+                                                  "data-bs-toggle": "modal",
+                                                  "data-bs-target":
+                                                    "#newMatiereModal",
+                                                },
+                                                on: {
+                                                  click: function ($event) {
+                                                    return _vm.setUpdate(item)
+                                                  },
+                                                },
+                                              },
+                                              [
+                                                _c(
+                                                  "span",
+                                                  {
+                                                    staticClass:
+                                                      "material-symbols-outlined",
+                                                  },
+                                                  [_vm._v("border_color")]
+                                                ),
+                                              ]
+                                            ),
+                                            _vm._v(" "),
                                             _c(
                                               "button",
                                               {
@@ -76519,22 +76674,102 @@ var render = function () {
                   ]
                 ),
               ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "mt-3" }, [
+                _c(
+                  "label",
+                  {
+                    staticClass: "mb-0 font-weight-semi-bold",
+                    attrs: { for: "roles" },
+                  },
+                  [_vm._v("Traitement")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "d-flex bg-white align-items-center py-1 border rounded-lg border-2 div-focus flex-1",
+                  },
+                  [
+                    _c(
+                      "select",
+                      {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.roleDestination,
+                            expression: "roleDestination",
+                          },
+                        ],
+                        staticClass:
+                          "form-select px-2 w-100 border-0 shadow-none",
+                        attrs: { id: "roles", name: "roles" },
+                        on: {
+                          change: function ($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function (o) {
+                                return o.selected
+                              })
+                              .map(function (o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.roleDestination = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          },
+                        },
+                      },
+                      _vm._l(_vm.traitementMatiere, function (role, index) {
+                        return _c("option", { domProps: { value: index } }, [
+                          _vm._v(
+                            "\n                            " +
+                              _vm._s(role) +
+                              "\n                        "
+                          ),
+                        ])
+                      }),
+                      0
+                    ),
+                  ]
+                ),
+              ]),
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "modal-footer" }, [
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-success",
-                  attrs: { type: "button" },
-                  on: {
-                    click: function ($event) {
-                      return _vm.saveMatiere()
+              !_vm.ismodify
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function ($event) {
+                          return _vm.saveMatiere()
+                        },
+                      },
                     },
-                  },
-                },
-                [_vm._v("Enregistrer")]
-              ),
+                    [_vm._v("Enregistrer")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.ismodify
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-success",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function ($event) {
+                          return _vm.updateMatiere()
+                        },
+                      },
+                    },
+                    [_vm._v("Modifier")]
+                  )
+                : _vm._e(),
               _vm._v(" "),
               _c(
                 "button",
@@ -77270,12 +77505,12 @@ var render = function () {
                               ? _vm._t("default", function () {
                                   return _vm._l(
                                     _vm.orderStatus,
-                                    function (status, index) {
+                                    function (status, value, index) {
                                       return _c(
                                         "div",
-                                        { attrs: { value: index } },
+                                        { attrs: { value: value } },
                                         [
-                                          item.status == index
+                                          item.status == value
                                             ? [
                                                 _c(
                                                   "span",
@@ -77284,7 +77519,7 @@ var render = function () {
                                                       "rounded-pill badge ",
                                                     class:
                                                       "bg-" +
-                                                      _vm.etatColor[index - 1],
+                                                      _vm.etatColor[index],
                                                   },
                                                   [_vm._v(" " + _vm._s(status))]
                                                 ),
@@ -77812,59 +78047,119 @@ var render = function () {
                   ]
                 ),
                 _vm._v(" "),
-                _c(
-                  "li",
-                  {
-                    staticClass:
-                      "rounded px-3 py-2 me-3  border-3 position-relative",
-                    class:
-                      _vm.order.status > 2
-                        ? "text-center text-dark border-bottom border-success  bg-light-green"
-                        : "bg-light text-secondary border-bottom fw-light",
-                  },
-                  [
-                    _vm.order.status > 2
-                      ? _c(
-                          "span",
-                          {
-                            staticClass:
-                              "material-symbols-outlined m-0 pe-2 align-middle text-success",
-                          },
-                          [_vm._v("check_circle")]
-                        )
-                      : _c(
-                          "span",
-                          {
-                            staticClass:
-                              "material-symbols-outlined m-0 pe-2 align-middle",
-                          },
-                          [_vm._v("radio_button_checked")]
-                        ),
-                    _vm._v(" En Salle de Tirage\n\t\t                    "),
-                    _vm.order.status == 2
-                      ? _c(
-                          "div",
-                          {
-                            staticClass:
-                              "progress position-absolute progress_status",
-                          },
-                          [
-                            _c("div", {
-                              staticClass:
-                                "progress-bar progress-bar-striped bg-success progress-bar-animated",
-                              staticStyle: { width: "100%" },
-                              attrs: {
-                                role: "progressbar",
-                                "aria-valuenow": "100",
-                                "aria-valuemin": "0",
-                                "aria-valuemax": "100",
+                _vm.isdecoupeOrder != 1
+                  ? _c(
+                      "li",
+                      {
+                        staticClass:
+                          "rounded px-3 py-2 me-3  border-3 position-relative",
+                        class:
+                          _vm.order.status > 2
+                            ? "text-center text-dark border-bottom border-success  bg-light-green"
+                            : "bg-light text-secondary border-bottom fw-light",
+                      },
+                      [
+                        _vm.order.status > 2
+                          ? _c(
+                              "span",
+                              {
+                                staticClass:
+                                  "material-symbols-outlined m-0 pe-2 align-middle text-success",
                               },
-                            }),
-                          ]
-                        )
-                      : _vm._e(),
-                  ]
-                ),
+                              [_vm._v("check_circle")]
+                            )
+                          : _c(
+                              "span",
+                              {
+                                staticClass:
+                                  "material-symbols-outlined m-0 pe-2 align-middle",
+                              },
+                              [_vm._v("radio_button_checked")]
+                            ),
+                        _vm._v(" En Salle de Tirage\n\t\t                    "),
+                        _vm.order.status == 2
+                          ? _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "progress position-absolute progress_status",
+                              },
+                              [
+                                _c("div", {
+                                  staticClass:
+                                    "progress-bar progress-bar-striped bg-success progress-bar-animated",
+                                  staticStyle: { width: "100%" },
+                                  attrs: {
+                                    role: "progressbar",
+                                    "aria-valuenow": "100",
+                                    "aria-valuemin": "0",
+                                    "aria-valuemax": "100",
+                                  },
+                                }),
+                              ]
+                            )
+                          : _vm._e(),
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.isdecoupeOrder == 1
+                  ? _c(
+                      "li",
+                      {
+                        staticClass:
+                          "rounded px-3 py-2 me-3  border-3 position-relative",
+                        class:
+                          _vm.order.status > 2 && _vm.order.status != 21
+                            ? "text-center text-dark border-bottom border-success  bg-light-green"
+                            : "bg-light text-secondary border-bottom fw-light",
+                      },
+                      [
+                        _vm.order.status > 2 && _vm.order.status != 21
+                          ? _c(
+                              "span",
+                              {
+                                staticClass:
+                                  "material-symbols-outlined m-0 pe-2 align-middle text-success",
+                              },
+                              [_vm._v("check_circle")]
+                            )
+                          : _c(
+                              "span",
+                              {
+                                staticClass:
+                                  "material-symbols-outlined m-0 pe-2 align-middle",
+                              },
+                              [_vm._v("radio_button_checked")]
+                            ),
+                        _vm._v(
+                          " En Salle de Découpe\n\t\t                    "
+                        ),
+                        _vm.order.status == 21
+                          ? _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "progress position-absolute progress_status",
+                              },
+                              [
+                                _c("div", {
+                                  staticClass:
+                                    "progress-bar progress-bar-striped bg-success progress-bar-animated",
+                                  staticStyle: { width: "100%" },
+                                  attrs: {
+                                    role: "progressbar",
+                                    "aria-valuenow": "100",
+                                    "aria-valuemin": "0",
+                                    "aria-valuemax": "100",
+                                  },
+                                }),
+                              ]
+                            )
+                          : _vm._e(),
+                      ]
+                    )
+                  : _vm._e(),
                 _vm._v(" "),
                 _c(
                   "li",
@@ -77872,12 +78167,12 @@ var render = function () {
                     staticClass:
                       "rounded px-3 py-2 me-3 border-3 position-relative",
                     class:
-                      _vm.order.status > 3
+                      _vm.order.status > 3 && _vm.order.status != 21
                         ? "text-center text-dark border-bottom border-success  bg-light-green"
                         : "bg-light text-secondary border-bottom fw-light",
                   },
                   [
-                    _vm.order.status > 3
+                    _vm.order.status > 3 && _vm.order.status != 21
                       ? _c(
                           "span",
                           {
@@ -77928,12 +78223,12 @@ var render = function () {
                     staticClass:
                       "rounded px-3 py-2 me-3 border-3 position-relative",
                     class:
-                      _vm.order.status > 4
+                      _vm.order.status > 4 && _vm.order.status != 21
                         ? "text-center text-dark border-bottom border-success  bg-light-green"
                         : "bg-light text-secondary border-bottom fw-light",
                   },
                   [
-                    _vm.order.status > 4
+                    _vm.order.status > 4 && _vm.order.status != 21
                       ? _c(
                           "span",
                           {
@@ -77984,12 +78279,12 @@ var render = function () {
                     staticClass:
                       "rounded px-3 py-2 me-3 border-3 position-relative",
                     class:
-                      _vm.order.status >= 5
+                      _vm.order.status >= 5 && _vm.order.status != 21
                         ? "text-center text-dark border-bottom border-success  bg-light-green"
                         : "bg-light text-secondary border-bottom fw-light",
                   },
                   [
-                    _vm.order.status >= 5
+                    _vm.order.status >= 5 && _vm.order.status != 21
                       ? _c(
                           "span",
                           {
@@ -79731,12 +80026,12 @@ var render = function () {
                                 ? _vm._t("default", function () {
                                     return _vm._l(
                                       _vm.orderStatus,
-                                      function (status, index) {
+                                      function (status, value, index) {
                                         return _c(
                                           "div",
                                           { attrs: { value: index } },
                                           [
-                                            item.status == index
+                                            item.status == value
                                               ? [
                                                   _c(
                                                     "span",
@@ -79745,9 +80040,7 @@ var render = function () {
                                                         "rounded-pill badge ",
                                                       class:
                                                         "bg-" +
-                                                        _vm.etatColor[
-                                                          index - 1
-                                                        ],
+                                                        _vm.etatColor[index],
                                                     },
                                                     [
                                                       _vm._v(
@@ -80344,59 +80637,119 @@ var render = function () {
                   ]
                 ),
                 _vm._v(" "),
-                _c(
-                  "li",
-                  {
-                    staticClass:
-                      "rounded px-3 py-2 me-3  border-3 position-relative",
-                    class:
-                      _vm.order.status > 2
-                        ? "text-center text-dark border-bottom border-success  bg-light-green"
-                        : "bg-light text-secondary border-bottom fw-light",
-                  },
-                  [
-                    _vm.order.status > 2
-                      ? _c(
-                          "span",
-                          {
-                            staticClass:
-                              "material-symbols-outlined m-0 pe-2 align-middle text-success",
-                          },
-                          [_vm._v("check_circle")]
-                        )
-                      : _c(
-                          "span",
-                          {
-                            staticClass:
-                              "material-symbols-outlined m-0 pe-2 align-middle",
-                          },
-                          [_vm._v("radio_button_checked")]
-                        ),
-                    _vm._v(" En Salle de Tirage\n\t\t                    "),
-                    _vm.order.status == 2
-                      ? _c(
-                          "div",
-                          {
-                            staticClass:
-                              "progress position-absolute progress_status",
-                          },
-                          [
-                            _c("div", {
-                              staticClass:
-                                "progress-bar progress-bar-striped bg-success progress-bar-animated",
-                              staticStyle: { width: "100%" },
-                              attrs: {
-                                role: "progressbar",
-                                "aria-valuenow": "100",
-                                "aria-valuemin": "0",
-                                "aria-valuemax": "100",
+                _vm.isdecoupeOrder != 1
+                  ? _c(
+                      "li",
+                      {
+                        staticClass:
+                          "rounded px-3 py-2 me-3  border-3 position-relative",
+                        class:
+                          _vm.order.status > 2
+                            ? "text-center text-dark border-bottom border-success  bg-light-green"
+                            : "bg-light text-secondary border-bottom fw-light",
+                      },
+                      [
+                        _vm.order.status > 2
+                          ? _c(
+                              "span",
+                              {
+                                staticClass:
+                                  "material-symbols-outlined m-0 pe-2 align-middle text-success",
                               },
-                            }),
-                          ]
-                        )
-                      : _vm._e(),
-                  ]
-                ),
+                              [_vm._v("check_circle")]
+                            )
+                          : _c(
+                              "span",
+                              {
+                                staticClass:
+                                  "material-symbols-outlined m-0 pe-2 align-middle",
+                              },
+                              [_vm._v("radio_button_checked")]
+                            ),
+                        _vm._v(" En Salle de Tirage\n\t\t                    "),
+                        _vm.order.status == 2
+                          ? _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "progress position-absolute progress_status",
+                              },
+                              [
+                                _c("div", {
+                                  staticClass:
+                                    "progress-bar progress-bar-striped bg-success progress-bar-animated",
+                                  staticStyle: { width: "100%" },
+                                  attrs: {
+                                    role: "progressbar",
+                                    "aria-valuenow": "100",
+                                    "aria-valuemin": "0",
+                                    "aria-valuemax": "100",
+                                  },
+                                }),
+                              ]
+                            )
+                          : _vm._e(),
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.isdecoupeOrder == 1
+                  ? _c(
+                      "li",
+                      {
+                        staticClass:
+                          "rounded px-3 py-2 me-3  border-3 position-relative",
+                        class:
+                          _vm.order.status > 2 && _vm.order.status != 21
+                            ? "text-center text-dark border-bottom border-success  bg-light-green"
+                            : "bg-light text-secondary border-bottom fw-light",
+                      },
+                      [
+                        _vm.order.status > 2 && _vm.order.status != 21
+                          ? _c(
+                              "span",
+                              {
+                                staticClass:
+                                  "material-symbols-outlined m-0 pe-2 align-middle text-success",
+                              },
+                              [_vm._v("check_circle")]
+                            )
+                          : _c(
+                              "span",
+                              {
+                                staticClass:
+                                  "material-symbols-outlined m-0 pe-2 align-middle",
+                              },
+                              [_vm._v("radio_button_checked")]
+                            ),
+                        _vm._v(
+                          " En Salle de Découpe\n\t\t                    "
+                        ),
+                        _vm.order.status == 21
+                          ? _c(
+                              "div",
+                              {
+                                staticClass:
+                                  "progress position-absolute progress_status",
+                              },
+                              [
+                                _c("div", {
+                                  staticClass:
+                                    "progress-bar progress-bar-striped bg-success progress-bar-animated",
+                                  staticStyle: { width: "100%" },
+                                  attrs: {
+                                    role: "progressbar",
+                                    "aria-valuenow": "100",
+                                    "aria-valuemin": "0",
+                                    "aria-valuemax": "100",
+                                  },
+                                }),
+                              ]
+                            )
+                          : _vm._e(),
+                      ]
+                    )
+                  : _vm._e(),
                 _vm._v(" "),
                 _c(
                   "li",
@@ -80404,12 +80757,12 @@ var render = function () {
                     staticClass:
                       "rounded px-3 py-2 me-3 border-3 position-relative",
                     class:
-                      _vm.order.status > 3
+                      _vm.order.status > 3 && _vm.order.status != 21
                         ? "text-center text-dark border-bottom border-success  bg-light-green"
                         : "bg-light text-secondary border-bottom fw-light",
                   },
                   [
-                    _vm.order.status > 3
+                    _vm.order.status > 3 && _vm.order.status != 21
                       ? _c(
                           "span",
                           {
@@ -80460,12 +80813,12 @@ var render = function () {
                     staticClass:
                       "rounded px-3 py-2 me-3 border-3 position-relative",
                     class:
-                      _vm.order.status > 4
+                      _vm.order.status > 4 && _vm.order.status != 21
                         ? "text-center text-dark border-bottom border-success  bg-light-green"
                         : "bg-light text-secondary border-bottom fw-light",
                   },
                   [
-                    _vm.order.status > 4
+                    _vm.order.status > 4 && _vm.order.status != 21
                       ? _c(
                           "span",
                           {
@@ -80513,14 +80866,15 @@ var render = function () {
                 _c(
                   "li",
                   {
-                    staticClass: "rounded px-3 py-2 me-3 border-3",
+                    staticClass:
+                      "rounded px-3 py-2 me-3 border-3 position-relative",
                     class:
-                      _vm.order.status >= 5
+                      _vm.order.status >= 5 && _vm.order.status != 21
                         ? "text-center text-dark border-bottom border-success  bg-light-green"
                         : "bg-light text-secondary border-bottom fw-light",
                   },
                   [
-                    _vm.order.status >= 5
+                    _vm.order.status >= 5 && _vm.order.status != 21
                       ? _c(
                           "span",
                           {
