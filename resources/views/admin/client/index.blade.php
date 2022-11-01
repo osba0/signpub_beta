@@ -6,6 +6,7 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <h3 class="text-warning border-bottom border-warning border-2 mb-4 text-nowrap">Liste des Clients</h3>
+                
             </div>
             <div class="col-md-12">
                 <client-data-table url="{{ route('client.list') }}">
@@ -20,4 +21,6 @@
     </div>
     @endif
 </div>
+
+
 @endsection

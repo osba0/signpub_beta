@@ -171,6 +171,17 @@ footer {
   max-height: 120px;
   overflow-y: auto;
 }
+.chooseClient .dropdown{
+   flex:  1;
+   margin-top:  0 !important;
+}
+.chooseClient .dropdown .dropdown-input {
+  border: 3px solid #dee2e6 !important;
+  font-size: 15px !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+ 
+}
 @media (min-width: 990px){
   body{
     // This 👇 is to offset for the footer height

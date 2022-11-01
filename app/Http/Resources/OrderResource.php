@@ -28,6 +28,7 @@ class OrderResource extends JsonResource
             'user' => $this->user->name,
             'infouser' => $this->user,
             'autre_matiere' => $this->autre_matiere,
+            'agent' => $this->agent,
             'created_at' => Carbon::parse($this->created_at)->format('d/m/Y H:i'),
         ];
     }

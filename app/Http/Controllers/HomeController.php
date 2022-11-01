@@ -8,6 +8,7 @@ use App\Models\StatusOrder;
 use App\Models\UserRole;
 use App\Models\Order;
 use App\Models\Client;
+use App\Models\Type;
 
 class HomeController extends Controller
 {
@@ -63,7 +64,13 @@ class HomeController extends Controller
 
         $canEdit = 0;
         $isAdmin = 0;
+        $canCreate=0;
         $canFiltreStatus = 0;
+
+        $matiere = Type::where("status", true)->orderBy('isOther', 'asc')->get()->toArray();
+        $clients = Client::get()->toArray();
+ 
+
 
         if($user->hasRole(UserRole::ROLE_SECRETARIAT) || $user->hasRole(UserRole::ROLE_ADMIN)){
            $isAdmin = 1;
@@ -75,6 +82,15 @@ class HomeController extends Controller
            $actualStatus= -1;
            $validationStatus= -1;
            $canFiltreStatus = 1;
+        }
+        if($user->hasRole(UserRole::ROLE_ADMIN)){
+            $canCreate = 1;
+        }
+
+         if($user->hasRole(UserRole::ROLE_RECEPTION)){
+            $actualStatus = StatusOrder::INITIE;
+            $validationStatus= 0;
+            $canCreate = 1;
         }
 
         if($user->hasRole(UserRole::ROLE_SECRETARIAT)){
@@ -110,6 +126,6 @@ class HomeController extends Controller
         $totalOrder   = Order::get()->where("status", '>=', StatusOrder::INITIE)->count();
         $totalClient   = Client::get()->count();
         
-        return view('admin.adminHome', compact('status', 'validationStatus', 'actualStatus', 'countNewOrder', 'countPrint','countDecoupe', 'countImpressionDirecte', 'countFinition', 'countDone', 'canEdit', 'totalOrder', 'totalClient', 'isAdmin', 'canFiltreStatus'));
+        return view('admin.adminHome', compact('status', 'validationStatus', 'actualStatus', 'countNewOrder', 'countPrint','countDecoupe', 'countImpressionDirecte', 'countFinition', 'countDone', 'canEdit', 'totalOrder', 'totalClient', 'isAdmin', 'canFiltreStatus', 'matiere', 'clients', 'canCreate'));
     }
 }

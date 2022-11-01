@@ -32,9 +32,12 @@
                         </select>
                         </div>
                     </template>
-                    <div class="col-md-9 d-flex align-items-center justify-content-end d-none">
-                       
-                       
+                    <div class="d-flex align-items-end justify-content-end" :class="[canFitreStatus == 1? 'col-m-4': 'col-md-8']">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nouvelleCommande" v-if="canCreate==1">
+                              Nouvelle commande
+                            </button>
+                    </div>
+                    <div class="col-md-9 align-items-center justify-content-end d-none">
 
                          <div class="d-flex align-items-center">
                             <input name="name" v-model="filters.search" class="form-control w-200 ml-3 d-none" placeholder="Search for ID"/>
@@ -179,13 +182,189 @@
             </div>
           </div>
         </div>
+        <!--Modal Ajout commande-->
+        <div class="modal fade" id="nouvelleCommande" tabindex="-1" aria-labelledby="newCmdLabel" aria-hidden="true" data-bs-backdrop="static">
+          <div class="modal-dialog  modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="newCmdLabel">Nouvelle Commande</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+               <form
+                        id="app"
+                        @submit.prevent="saveOrder"
+                        :action="'/order/' + order.id"
+                        method="post"
+                    >
+              <div class="modal-body">
+
+                        <div class="mb-3">
+                            <label for="client" class="mb-0 font-weight-semi-bold">Client</label>
+                            <div class="d-flex align-items-start chooseClient">
+                             <Dropdown
+                                    :options="clients"
+                                    v-on:selected="validateSelection"
+                                    v-on:filter="getDropdownValues"
+                                    :disabled="false"
+                                    name="clientID"
+                                    :maxItem="10"
+                                    placeholder="Choisir un client">
+                                </Dropdown>
+                                <img :src="'/assets/logoClients/'+clientLogo" class="ms-2" v-if="clientLogo!='' && clientLogo!=null" height="80">
+                            </div>
+                            <div class="bg-white d-none align-items-center py-1 border rounded-lg border-2 div-focus flex-1">
+                               
+                                <!--select
+                                    id="clients"
+                                    v-model="order.client-"
+                                    type="text"
+                                    name="client"
+                                    class="form-select px-2 w-100 border-0 shadow-none"
+                                >
+                                    <option value=''>Choisir</option>
+                                    <option :value='client' v-for="client in listClient">
+                                        {{ client.company }}
+                                    </option> 
+                                </select-->
+                            </div>
+                           
+                        </div>
+               
+                         <div class="mb-3">
+                            <label for="matiere" class="mb-0 font-weight-semi-bold">Matiére</label>
+                            <div class="bg-white align-items-center py-1 border rounded-lg border-2 div-focus flex-1">
+                                <select
+                                    id="matieres"
+                                    v-model="order.matiere"
+                                    type="text"
+                                    name="matiere"
+                                    class="form-select px-2 w-100 border-0 shadow-none"
+                                    @change="otherMatieres(this)"
+                                >
+                                    <option value=''>Choisir</option>
+                                    <option :value='matiere' v-for="matiere in listMatiere">
+                                        {{ matiere.name }}
+                                    </option> 
+                                </select>
+                            </div>
+                             <template v-if="showOhter">
+                                <div class="mt-2 bg-white align-items-center py-1 border rounded-lg border-2 div-focus flex-1">
+                                <input
+                                    id="other"
+                                    v-model="order.otherMatiere"
+                                    type="text"
+                                    name="other"
+                                    placeholder="Précisez la matiére"
+                                    class="form-control border-0 shadow-none bg-transparent"
+                                    autocomplete="off"
+                                >
+                                </div>
+                            </template>
+                        </div>
+
+                        <div class="d-flex w-100">
+                            <div class="mb-3 w-50">
+                                <div>
+                                    <label for="long" class="mb-0 font-weight-semi-bold">Longeur (en métre)</label>
+                                    <div class="d-flex bg-white align-items-center py-1 border rounded-lg border-2 div-focus flex-1 me-3">
+                                        <input
+                                            id="long"
+                                            v-model="order.long"
+                                            type="text"
+                                            name="long"
+                                            placeholder="Entrer la longueur"
+                                            class="form-control border-0 shadow-none bg-transparent"
+                                            required
+                                            autocomplete="off"
+                                        >
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                            <div class="mb-3 w-50">
+                                <label for="larg" class="mb-0 font-weight-semi-bold">Largeur (en métre)</label>
+                                <div class="d-flex bg-white align-items-center py-1 border rounded-lg border-2 div-focus flex-1">
+                                    <input
+                                        id="larg"
+                                        v-model="order.larg"
+                                        type="text"
+                                        name="large"
+                                        placeholder="Entrer la largeur"
+                                        class="form-control border-0 shadow-none bg-transparent"
+                                        required
+                                        autocomplete="off"
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
+                        
+
+                        <div class="mb-3">
+                            <label for="unit" class="mb-0 font-weight-semi-bold">Nombre de copie</label>
+                            <div class="d-flex bg-white align-items-center py-1 border rounded-lg border-2 div-focus flex-1">
+                                <input
+                                    id="unit"
+                                    v-model="order.unit"
+                                    type="number"
+                                    name="unit"
+                                    placeholder=""
+                                    class="form-control border-0 shadow-none bg-transparent"
+                                    required
+                                    autocomplete="off"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="unit" class="mb-0 font-weight-semi-bold">Commentaire</label>
+                            <div class="d-flex bg-white align-items-center py-1 border rounded-lg border-2 div-focus flex-1">
+                                <textarea 
+                                    id="commentaire"
+                                    v-model="order.commentaire"
+                                    type="number"
+                                    name="commentaire"
+                                    placeholder=""
+                                    class="form-control border-0 shadow-none bg-transparent"
+                                    autocomplete="off"
+                                ></textarea>
+                            </div>
+                        </div>
+
+                        <p>
+                            <input
+                                type="hidden"
+                                name="_token"
+                            >
+                        </p>
+
+                       
+                    
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                 <button
+                    type="submit"
+                    class="btn btn-success"
+                >
+                    <span v-if="isloading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Créer
+                </button>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
     </div>
 </template>
 <script type="text/ecmascript-6">
+import Dropdown from 'vue-simple-search-dropdown';
 const Swal = require('sweetalert2');
 export default { 
     name: "OrderListDataTable",    
-    
+    components: {
+        Dropdown
+    },
     props: {
         orderStatus: {type: Object, required: true},
         valueStatus: {type: Number, required: true},
@@ -196,6 +375,9 @@ export default {
         url: {type: String, required: true},
         isAdmin: {type: Number, required: true},
         canFitreStatus: {type: Number, required: true},
+        listMatiere: {type: Array, required: true},
+        listClient: {type: Array, required: true},
+        canCreate: {type: Number, required: true}
     },
     data() {
         return {
@@ -236,6 +418,11 @@ export default {
                     orderable: false,
                 },
                 {
+                    label: 'Agent',
+                    name: 'agent',
+                    orderable: true,
+                },
+                {
                     label: 'Date',
                     name: 'created_at',
                     orderable: false,
@@ -270,10 +457,33 @@ export default {
             commentDetail: {
                 id: '',
                 comment: ''
-            }
+            },
+            order: {
+                id: '',
+                matiere: '',
+                idMatiere:0,
+                long: '',
+                larg: '',
+                unit: 1,
+                commentaire: '',
+                otherMatiere: '',
+                client: ''
+            },
+            showOhter: false,
+            clients: [],
+            clientLogo: ''
         };
     },
     methods: {
+        validateSelection(selection) {
+            this.order.client = selection.id;
+            console.log(selection.logo + " has been selected");
+            this.clientLogo = selection.logo;
+        },
+      
+        getDropdownValues(keyword) {
+            console.log("You could refresh options by querying the API with " + keyword);
+        },
         selectLength(event) {
             this.filters.length = event.target.value;
             return true;
@@ -292,7 +502,7 @@ export default {
              this.isloading = id;
 
             Swal.fire({
-              title: 'Confirmez la validation',
+              title: 'Confirmez la validation 123',
               text: "",
               icon: 'warning',
               showCancelButton: true,
@@ -304,14 +514,7 @@ export default {
               if (result.isConfirmed) { 
                 axios.put(`change-status/${id}/${this.valueStatus}/${user_id}`)
                 .then(res => {
-                    Swal.fire({
-                      title: 'Succés',
-                      text: "Commande validé avec succés.",
-                      icon: 'success'
-                    }).then((result) => {
-                        this.isloading = '';
-                         location.reload();
-                    });
+                    this.sendNotification(id, user_id);
                 })
                 .catch(error => {
                    
@@ -344,7 +547,8 @@ export default {
                       icon: 'success'
                     }).then((result) => {
                          location.reload();
-                    });
+                    });  
+                   
                 })
                 .catch(error => {
                    
@@ -377,6 +581,116 @@ export default {
                    console.log("dd");
                 });
            
+        },
+         otherMatieres(){
+            this.order.idMatiere = this.order.matiere.id;
+            if(this.order.matiere.name=='Autre'){ 
+                this.showOhter = true;
+            }else{
+                this.showOhter = false;
+            }
+        },
+        saveOrder() {
+            
+            console.log("Form", this.order);
+            if(this.order.client == '' || this.order.client == null){
+                 Swal.fire({
+                      title: '',
+                      text: 'Choisir un client',
+                      icon: 'warning'
+                    }).then((result) => {
+                      
+                    });
+                return false;
+            }
+             if(this.order.idMatiere == '' || this.order.idMatiere == 0){
+                 Swal.fire({
+                      title: '',
+                      text: 'Choisir une matiére',
+                      icon: 'warning'
+                    }).then((result) => {
+                      
+                    });
+                return false;
+            }
+            if(this.order.long <= 0 || this.order.larg <= 0 ){
+                 Swal.fire({
+                      title: '',
+                      text: 'La surface est incorrect',
+                      icon: 'warning'
+                    }).then((result) => {
+                      
+                    });
+                return false;
+            }
+            this.isloading=true;  
+            axios.post('/orders/order-store', this.order)
+                .then(response => {
+                    var self=this;
+                    setTimeout(function(){
+                       self.isloading=false;   
+                    },500);
+                     Swal.fire({
+                      title: 'Succés',
+                      text: "Commande crée avec succés!",
+                      icon: 'success'
+                    }).then((result) => {
+                        location.reload();
+                    });
+
+                })
+                .catch(error => {
+                    setTimeout(function(){
+                       self.isloading=false;   
+                    },500);
+                    Swal.fire({
+                      title: 'Error',
+                      text: error.response,
+                      icon: 'error'
+                    }).then((result) => {
+                      
+                    });
+                    console.log(error.response)
+                });
+        },
+        sendNotification(id, user_id){          
+
+            axios.put(`send-notif/${id}/${this.valueStatus}/${user_id}`, this.order)
+                .then(response => {
+                    Swal.fire({
+                      title: 'Succés',
+                      text: "Commande validé avec succés.",
+                      icon: 'success'
+                    }).then((result) => {
+                        this.isloading = '';
+                         location.reload();
+                    }); 
+                })
+                .catch(error => {
+                    setTimeout(function(){
+                       
+                    },500);
+                    Swal.fire({
+                      title: 'Error',
+                      text: '',
+                      icon: 'error'
+                    }).then((result) => {
+                      
+                    });
+                  
+                });
+
+
+                 /*setTimeout(function(){
+                Swal.fire({
+                  title: 'Succés',
+                  text: "Commande validé avec succés.",
+                  icon: 'success'
+                }).then((result) => {
+                    this.isloading = '';
+                    // location.reload();
+                }); 
+            },8000);*/
         }
     },
     watch: {
@@ -393,6 +707,18 @@ export default {
                     });
                 });
         }
+    },
+    mounted(){
+        var client=[];
+        for(var i=0; i<this.listClient.length;i++){
+            var obj = this.listClient[i];
+            client['id'] = obj.user;
+            client['name'] = obj.company;
+            client['logo'] = obj.logo;
+            this.clients.push(client);
+            client=[];
+        }
+        console.log(this.clients);
     }
    
 };

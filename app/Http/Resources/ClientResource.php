@@ -21,6 +21,7 @@ class ClientResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'company' => $this->company,
+            'password' => $this->password,
             'phone_code' => $this->phone_code,
             'phone' => ' +'.$this->phone_code.' '.$this->phone,
             'phoneOnly' => $this->phone,
@@ -31,7 +32,10 @@ class ClientResource extends JsonResource
             'is_online' => (Cache::has('user-is-online-' . $this->user)? ' <span class="text-success text-nowrap fw-bold">En Ligne</span>' : ' <span class="text-danger text-nowrap fw-bold">Hors Ligne</span>').' '.($this->lastSee!=""?Carbon::parse($this->lastSee)->diffForHumans():''),
             'created_at' => Carbon::parse($this->created_at)->format('d/m/Y H:m'),
             'username' => $this->username,
+            'email' => $this->email,
             'user' => $this->user,
+            'logo' => $this->logo,
+            'type_id' => $this->type_id
             
         ];
     }

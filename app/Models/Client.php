@@ -14,15 +14,21 @@ class Client extends Model
      protected $fillable = [
         'id',
         'user',
+        'password',
         'company',
         'address',
         'account_type_id',
         'phone_code',
-        'phone'
+        'phone',
+        'logo'
     ];
 
     protected $dataTableColumns = [
         'id' => [
+            'searchable' => true,
+            'orderable' => true,
+        ],
+        'password' => [
             'searchable' => true,
             'orderable' => true,
         ],
@@ -43,6 +49,10 @@ class Client extends Model
             'orderable' => true,
         ],
         'phone' => [
+            'searchable' => true,
+            'orderable' => true,
+        ],
+        'logo' => [
             'searchable' => true,
             'orderable' => true,
         ]

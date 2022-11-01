@@ -31,6 +31,11 @@ use App\Http\Controllers\ChangePasswordController;
 
 Auth::routes(['verify' => true]);
 
+// Desactif register route
+Route::any('/register', function() {
+    return  view('auth.login');
+});
+
 Route::get('/',  [HomeController::class, 'index'])->name('home');
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -48,7 +53,12 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
         Route::get('admin/clients', [ClientController::class, 'index'])->name('index.client');
         Route::get('clients/client-list', [ClientController::class, 'getListClient'])->name('client.list');
 
+        Route::post('clients/save', [ClientController::class, 'save'])->name('client.save');
+        Route::post('clients/edit', [ClientController::class, 'edit'])->name('client.edit');
+
         Route::delete('admin/clients/delete-client/{id}', [ClientController::class, 'deleteClient']); 
+
+        Route::post('admin/clients/remove-logo-client', [ClientController::class, 'destroy']); 
 
         Route::get('admin/orders/{id}/edit', [OrderController::class, 'editAdmin'])->name('admin.order.edit');
 
@@ -78,6 +88,7 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
 
     Route::get('admin/order-list', [OrderController::class, 'getOrders'])->name('orders');
     Route::put('admin/change-status/{id}/{status}/{idUser}', [OrderController::class, 'update'])->name('change.status');
+    Route::put('admin/send-notif/{id}/{status}/{idUser}', [OrderController::class, 'notificationOrder']);
 
     Route::get('/order-get/{order}', [OrderController::class, 'orderShow'])->name('orders-show');
 

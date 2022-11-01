@@ -59,16 +59,18 @@
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
                         @guest
-                            @if (Route::has('login'))
-                                <li class="nav-item">
-                                    <a class="nav-link px-4 py-3 fs-6 fw-bold {{ \Request::is('login') ? 'text-dark border-bottom border-warning border-4' : 'text-secondary'}}" href="{{ route('login') }}"><span class="align-middle material-symbols-outlined">account_circle</span> {{ __('Se connecter') }}</a>
-                                </li>
-                            @endif
+                            @if(false)
+                                @if (Route::has('login'))
+                                    <li class="nav-item">
+                                        <a class="nav-link px-4 py-3 fs-6 fw-bold {{ \Request::is('login') ? 'text-dark border-bottom border-warning border-4' : 'text-secondary'}}" href="{{ route('login') }}"><span class="align-middle material-symbols-outlined">account_circle</span> {{ __('Se connecter') }}</a>
+                                    </li>
+                                @endif
 
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link px-4 py-3 fs-6 fw-bold {{ \Request::is('register') ? 'text-dark border-bottom border-warning border-4' : 'text-secondary'}}" href="{{ route('register') }}"><span class="align-middle material-symbols-outlined mx-1">person_add</span>{{ __('Créer un compte') }}</a>
-                                </li>
+                                @if (Route::has('register'))
+                                    <li class="nav-item">
+                                        <a class="nav-link px-4 py-3 fs-6 fw-bold {{ \Request::is('register') ? 'text-dark border-bottom border-warning border-4' : 'text-secondary'}}" href="{{ route('register') }}"><span class="align-middle material-symbols-outlined mx-1">person_add</span>{{ __('Créer un compte') }}</a>
+                                    </li>
+                                @endif
                             @endif
                         @else
                             @if(auth()->user()->hasRole(\App\Models\UserRole::ROLE_ADMIN))

@@ -92,10 +92,11 @@ class OrderController extends Controller
                 'larg'    => floatval(str_replace(',', '.', $largeur)),
                 'comment' => (request('commentaire')==""? ' ':request('commentaire')),
                 'unit'    => request('unit'),
-                'user_id'    => $user->id,
+                'user_id' => intval(request('client')), //$user->id,
                 'autre_matiere' => (request('otherMatiere')==""? ' ':request('otherMatiere')),
                 'images' => '',
-                'status' => StatusOrder::INITIE
+                'status' => StatusOrder::INITIE,
+                'agent'    => $user->username
             ]);
 
         }catch(\Exceptions $e){
@@ -330,6 +331,61 @@ class OrderController extends Controller
                 'user_id'    => Auth::user()->id,
                 'status'     => $oldStatus['status']
             ]);
+        /*
+
+
+        // Notification du changement de status au client
+        $user = User::get()->where("id", $idUser);
+
+        Notification::send($user, new OrderStatusNotification($status, $id));
+
+        // Notification des employées en fonction du status
+        $users =User::where('is_admin', true)->get();
+
+        $id_employes = [];
+
+
+        if($status == StatusOrder::EN_SALLE_DE_TIRAGE){
+            foreach($users as $user){
+                if($user->hasRole(UserRole::ROLE_SALLE_TIRAGE_ROULEAU) || $user->hasRole(UserRole::ROLE_SALLE_TIRAGE_FEUILLE) || $user->hasRole(UserRole::ROLE_SALLE_DECOUPE)){
+                      $id_employes[] = $user->id;
+                }
+            }
+        }
+
+        if($status == StatusOrder::EN_FINITION){
+            foreach($users as $user){
+                if($user->hasRole(UserRole::ROLE_FINITION)){
+                      $id_employes[] = $user->id;
+                }
+            }
+        }
+
+        if($status == StatusOrder::ATTENTE_POUR_LIVRAISON){
+            foreach($users as $user){
+                if($user->hasRole(UserRole::ROLE_ADMIN) || $user->hasRole(UserRole::ROLE_SECRETARIAT)){
+                      $id_employes[] = $user->id;
+                }
+            }
+        }
+
+        
+
+
+        $employes =User::whereIn('id', $id_employes)->get();
+
+        Notification::send($employes, new OrderStatusNotification($status, $id));*/
+
+
+       
+
+        return response([
+            "code" => 0,
+            "message" => "OK"
+        ]);
+    }
+
+    public function notificationOrder(Request $request, $id, $status, $idUser){
 
         // Notification du changement de status au client
         $user = User::get()->where("id", $idUser);
@@ -372,14 +428,6 @@ class OrderController extends Controller
         $employes =User::whereIn('id', $id_employes)->get();
 
         Notification::send($employes, new OrderStatusNotification($status, $id));
-
-
-       
-
-        return response([
-            "code" => 0,
-            "message" => "OK"
-        ]);
     }
 
     /**
@@ -451,14 +499,6 @@ class OrderController extends Controller
                 "message" => "Erreur!"
             ]);
        }
-
-       /*
-$user->notifications()
-    ->where('id', $notificationId) // and/or ->where('type', $notificationType)
-    ->get()
-    ->first()
-    ->delete();
-       */
     
     }
 }

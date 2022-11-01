@@ -15,9 +15,9 @@
                         </div>
                         <div class="px-3">
                             <label>Date Fin</label>
-                            <datepicker v-model="surface.dateFin" format='dd/MM/yyyy' :format="customFormatter" placeholder="jj/mm/aaaa"></datepicker>
+                            <datepicker v-model="surface.dateFin" format='dd/MM/yyyy' :format="customFormatterDateFin" placeholder="jj/mm/aaaa"></datepicker>
                         </div>
-                        <div>
+                        <div> 
                             <label>Liste des Tireurs</label>
                             <select
                             id="tireur"
@@ -126,7 +126,7 @@ export default {
             tableData: [],
             surface: {
                 dateDebut: '',
-                dateFin: '',
+                dateFin:'',
                 tireur: ''
             },
             isloading: false
@@ -134,7 +134,12 @@ export default {
     },
     methods: {
          customFormatter(date) {
+          this.surface.dateDebut = moment(date).format('YYYY-MM-DD 00:00:00');
           return moment(date).format('YYYY-MM-DD');
+        },
+        customFormatterDateFin(date){
+            this.surface.dateDebut = moment(date).format('YYYY-MM-DD 23:59:59');
+            return moment(date).format('YYYY-MM-DD');
         },
         search(){
             this.isloading=true;

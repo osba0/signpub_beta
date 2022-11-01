@@ -430,15 +430,81 @@
         </div>
     </div>
     @endif
+
+     @if(auth()->user()->hasRole(\App\Models\UserRole::ROLE_RECEPTION)) 
+    <div class="row mb-4 dasboard-client">
+        <div class="col-12 col-sm-6 col-xxl-4 d-flex">
+            <div class="illustration flex-fill card">
+                <div class="p-0 d-flex flex-fill card-body">
+                    <div class="g-0 w-100 row">
+                        <div class="col-6">
+                            <div class="illustration-text p-3 m-1">
+                                <h4 class="illustration-text">Bienvenu(e), <br> <?= auth()->user()->name ?></h4>
+                                <span class="fs-6 fw-light">Poste</span>
+                                <p class="mb-0 text-warning fw-bold">RECEPTION</p>
+                            </div>
+                        </div>
+                        <div class="align-self-center justify-content-center text-center col-6 fs-80">
+                            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xxl-4 d-flex">
+            <div class="card flex-fill">
+                <div class="card-body py-4">
+                    <div class="d-flex align-items-start">
+                        <div class="flex-grow-1">
+                            <h3 class="mb-2">{{ $countNewOrder }}</h3>
+                            <p class="mb-2 fw-light fs-4">En cours de validation</p>
+                            <div class="mb-0">
+                                <a href="#" class="text-warning d-none">Afficher</a>
+                            </div>
+                        </div>
+                        <div class="d-inline-block ms-3">
+                            <div class="stat d-flex align-items-center justify-content-center border-warning">
+                               <span class="text-warning material-symbols-outlined">timer</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xxl-4 d-flex">
+            <div class="card flex-fill">
+                <div class="card-body py-4">
+                    <div class="d-flex align-items-start">
+                        <div class="flex-grow-1">
+                            <h3 class="mb-2">{{ $countDone }}</h3>
+                            <p class="mb-2 fw-light fs-4">Prête pour livraison</p>
+                            <div class="mb-0">
+                               <a href="#" class="text-warning d-none">Afficher</a>
+                            </div>
+                        </div>
+                        <div class="d-inline-block ms-3">
+                            <div class="stat d-flex align-items-center justify-content-center">
+                                <span class="text-warning material-symbols-outlined">local_shipping</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>   
+    </div>
+    @endif
     
     <div class="row mb-3">
         <div class="col-md-12">
             <h3 class="text-warning border-bottom border-warning border-2">Commandes en cours</h3>
+
         </div>
     </div>
     <div class="row justify-content-center">
         <div class="col-md-12">
                 <order-list-data-table 
+                :list-matiere='@json($matiere)' 
+                :list-client='@json($clients)' 
                 :order-status='@json($status ?? "")'  
                 :value-status = {{ $validationStatus }}
                 :current-status = {{ $actualStatus }}
@@ -448,6 +514,7 @@
                 :is-admin = {{ $isAdmin }}
                 url="{{ route('orders') }}"
                 :can-fitre-status={{ $canFiltreStatus }}
+                :can-create = {{ $canCreate }}
                 >
                 </order-list-data-table>
         </div>

@@ -84,15 +84,17 @@ login
                             </div>
                         </div>
                     </form>
-                    <div class="d-flex align-items-center justify-content-center w-100 rounded mt-4">
-                        <span class="material-symbols-outlined fs-1 me-2">
-                        person_add
-                        </span>
-                        <div  class="d-flex flex-column align-items-center">
-                            <span class="">Première connexion à cet espace ?</span>
-                            <a href="{{ route('register')}}" class="text-warning btn-link">Je crée mon espace sécurisé</a>
+                    @if(false)
+                        <div class="d-flex align-items-center justify-content-center w-100 rounded mt-4">
+                            <span class="material-symbols-outlined fs-1 me-2">
+                            person_add
+                            </span>
+                            <div  class="d-flex flex-column align-items-center">
+                                <span class="">Première connexion à cet espace ?</span>
+                                <a href="{{ route('register')}}" class="text-warning btn-link">Je crée mon espace sécurisé</a>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
             </div>
         </div>

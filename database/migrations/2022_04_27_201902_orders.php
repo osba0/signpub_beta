@@ -23,6 +23,7 @@ class Orders extends Migration
             $table->foreignId('user_id')->constrained();
             $table->text('images');
             $table->integer('status');
+            $table->string('agent');
             $table->timestamps();
             
         });

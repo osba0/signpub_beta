@@ -14,6 +14,7 @@ class UserRole
     const ROLE_SALLE_DECOUPE = 'salle_decoupe';
     const ROLE_IMPRESSION_DIRECTE = 'impression_directe';  
     const ROLE_FINITION = 'finition';
+    const ROLE_RECEPTION = 'reception';
 
 
     /***
@@ -28,7 +29,8 @@ class UserRole
             static::ROLE_SALLE_TIRAGE_FEUILLE => 'Salle tirage feuille',
             static::ROLE_SALLE_DECOUPE => 'Salle découpe',
             static::ROLE_IMPRESSION_DIRECTE => 'Impression directe',
-            static::ROLE_FINITION => 'Finition'
+            static::ROLE_FINITION => 'Finition',
+            static::ROLE_RECEPTION => 'Réception'
         ];
     }
 }

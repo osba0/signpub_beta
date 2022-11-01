@@ -25,7 +25,8 @@ class Order extends Model
         'user_id',
         'images',
         'status',
-        'autre_matiere'
+        'autre_matiere',
+        'agent'
     ];
 
     
@@ -68,6 +69,10 @@ class Order extends Model
             'orderable' => true,
         ],
         'autre_matiere' => [
+            'searchable' => false,
+            'orderable' => true,
+        ],
+        'agent' => [
             'searchable' => false,
             'orderable' => true,
         ]

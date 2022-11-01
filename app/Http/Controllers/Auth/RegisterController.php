@@ -65,6 +65,8 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        /*$random = \Str::random(40);
+        var_dump($random); die();*/
         $result = User::create([
             'name' => $data['name'],
             'username' => \Str::slug($data['name']).random_int(0, 999), //$data['username'],
