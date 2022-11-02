@@ -6907,6 +6907,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
@@ -6972,8 +6980,8 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
       orderBy: "created_at",
       orderDir: "desc",
       columns: [{
-        label: 'Réf',
-        name: 'id',
+        label: '#',
+        //name: 'id',
         orderable: true
       }, {
         label: 'Client',
@@ -7237,6 +7245,17 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
          // location.reload();
       }); 
       },8000);*/
+    },
+    getLogo: function getLogo(id) {
+      for (var i = 0; i < this.listClient.length; i++) {
+        var obj = this.listClient[i];
+
+        if (obj.user == id) {
+          return obj.logo;
+        }
+      }
+
+      return '';
     }
   },
   watch: {
@@ -79201,6 +79220,32 @@ var render = function () {
                               },
                             }),
                             _vm._v(" "),
+                            column.label === "#"
+                              ? _vm._t("default", function () {
+                                  return [
+                                    _vm.getLogo(item.infouser.id) != "" &&
+                                    _vm.getLogo(item.infouser.id) != null
+                                      ? [
+                                          _c("img", {
+                                            attrs: {
+                                              src:
+                                                "/assets/logoClients/" +
+                                                _vm.getLogo(item.infouser.id),
+                                              height: "50",
+                                            },
+                                          }),
+                                        ]
+                                      : [
+                                          _vm._v(
+                                            "\n                        " +
+                                              _vm._s(item.id) +
+                                              "\n                    "
+                                          ),
+                                        ],
+                                  ]
+                                })
+                              : _vm._e(),
+                            _vm._v(" "),
                             column.label === "Dimension"
                               ? _vm._t("default", function () {
                                   return [
@@ -79217,7 +79262,7 @@ var render = function () {
                                             _vm._s(item.long) +
                                             "x" +
                                             _vm._s(item.larg) +
-                                            ")"
+                                            ") "
                                         ),
                                       ]
                                     ),

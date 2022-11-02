@@ -60,8 +60,16 @@
                         :meta="column.meta"
                     >
                     </data-table-cell>
+                    <slot v-if="column.label === '#'">
+                        <template v-if="getLogo(item.infouser.id)!='' && getLogo(item.infouser.id)!=null">
+                            <img :src="'/assets/logoClients/'+getLogo(item.infouser.id)" height="50">
+                        </template>
+                        <template v-else>
+                            {{ item.id }}
+                        </template>
+                    </slot>
                     <slot v-if="column.label === 'Dimension'">
-                       <span class="font-weight-semi-bold">{{ item.long * item.larg }}m<sup>2</sup> ({{ item.long }}x{{ item.larg }})</span>
+                       <span class="font-weight-semi-bold">{{ item.long * item.larg }}m<sup>2</sup> ({{ item.long }}x{{ item.larg }}) </span>
                     </slot>
                      <slot v-if="column.label === 'Status'">
 
@@ -386,8 +394,8 @@ export default {
             orderDir: "desc",
             columns: [
                 {
-                    label: 'Réf',
-                    name: 'id',
+                    label: '#',
+                    //name: 'id',
                     orderable: true,
                 },
                 {
@@ -691,6 +699,15 @@ export default {
                     // location.reload();
                 }); 
             },8000);*/
+        },
+        getLogo(id){
+            for(var i=0; i<this.listClient.length;i++){
+                var obj = this.listClient[i];
+                if(obj.user == id){
+                    return obj.logo;
+                }
+            }
+            return '';
         }
     },
     watch: {
