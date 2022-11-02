@@ -485,7 +485,7 @@ export default {
     methods: {
         validateSelection(selection) {
             this.order.client = selection.id;
-            console.log(selection.logo + " has been selected");
+            //console.log(selection.logo + " has been selected");
             this.clientLogo = selection.logo;
         },
       

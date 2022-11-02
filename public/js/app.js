@@ -7060,8 +7060,8 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
   },
   methods: {
     validateSelection: function validateSelection(selection) {
-      this.order.client = selection.id;
-      console.log(selection.logo + " has been selected");
+      this.order.client = selection.id; //console.log(selection.logo + " has been selected");
+
       this.clientLogo = selection.logo;
     },
     getDropdownValues: function getDropdownValues(keyword) {
