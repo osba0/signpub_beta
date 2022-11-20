@@ -7653,8 +7653,8 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
       },
       tableData: [],
       surface: {
-        dateDebut: '',
-        dateFin: '',
+        dateDebut: new Date(new Date().setDate(new Date().getDate() - 1)),
+        dateFin: new Date(),
         tireur: ''
       },
       isloading: false
@@ -7666,7 +7666,7 @@ var Swal = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/di
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format('YYYY-MM-DD');
     },
     customFormatterDateFin: function customFormatterDateFin(date) {
-      this.surface.dateDebut = moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format('YYYY-MM-DD 23:59:59');
+      this.surface.dateFin = moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format('YYYY-MM-DD 23:59:59');
       return moment__WEBPACK_IMPORTED_MODULE_1___default()(date).format('YYYY-MM-DD');
     },
     search: function search() {

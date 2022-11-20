@@ -113,7 +113,7 @@ export default {
                     orderable: false,
                 },
                 
-            ],
+            ], 
             filters: {
                 search: '',
                 length: 10
@@ -124,12 +124,14 @@ export default {
                 placeholderSearch: 'Rechercher'
             },
             tableData: [],
+
             surface: {
-                dateDebut: '',
-                dateFin:'',
+                dateDebut: new Date(new Date().setDate(new Date().getDate()-1)),
+                dateFin:  new Date() ,
                 tireur: ''
             },
-            isloading: false
+            isloading: false,
+            
         };
     },
     methods: {
@@ -138,7 +140,7 @@ export default {
           return moment(date).format('YYYY-MM-DD');
         },
         customFormatterDateFin(date){
-            this.surface.dateDebut = moment(date).format('YYYY-MM-DD 23:59:59');
+            this.surface.dateFin = moment(date).format('YYYY-MM-DD 23:59:59');
             return moment(date).format('YYYY-MM-DD');
         },
         search(){
